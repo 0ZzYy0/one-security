@@ -45,7 +45,7 @@ public class SysMobileLoginController {
     private final static String KEY = ConfigConstant.WX_CONFIG_KEY;
     
 	/**
-	 * 查询是否绑定
+	 * 用户授权登录业务处理
 	 */
 	@RequestMapping(value = "oAuth2")
 	public String oAuth2(HttpServletResponse response,HttpServletRequest request)throws IOException {
@@ -57,19 +57,11 @@ public class SysMobileLoginController {
 		String appsecret = config.getAppSecrect();
 		//String oAuth2Url = config.getoAuth2Url();
 		
-		if("".equals(appid) || "".equals(appsecret)){
-			return R.error(10003, "appid不能为空！").toString();
-		}else{
+		if(!"".equals(appid) && !"".equals(appsecret)){
 			String code = request.getParameter("code");
-			if(code==null || "".equals(code)){
-				//return R.error(10004, "用户不同意授权！").toString();
-				return "redirect:modules/mobile/home.html";
-			}else{
+			if (code != null && !"".equals(code)){
 				WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(appid, appsecret, code);
-				if(weixinOauth2Token==null){
-					//return R.error(10005, "获取登录Token失败！").toString();
-					return "redirect:modules/mobile/home.html";
-				}else{
+				if(weixinOauth2Token!=null){
 					String accessToken = weixinOauth2Token.getAccessToken();
 					String openId = weixinOauth2Token.getOpenId();
 					SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
@@ -78,30 +70,24 @@ public class SysMobileLoginController {
 						SysUserEntity user = sysUserService.queryByUserName(openId);
 						
 						if(user != null){
+							//用户存在
 							Subject subject = ShiroUtils.getSubject();
 							UsernamePasswordToken token = new UsernamePasswordToken(openId, "123456");
 							subject.login(token);
 						}else{
+							//用户不存在
 							sysUserService.addUser(snsUserInfo);
 							Subject subject = ShiroUtils.getSubject();
 							UsernamePasswordToken token = new UsernamePasswordToken(openId, "123456");
 							subject.login(token);
 						}
-					}else{
-						//return R.error(10006, "获取用户信息不成功，登录失败！").toString();
-						return "redirect:modules/mobile/home.html";
 					}
-					
-					//通过openid查询医生是否存在，患者直接进入
-					
-					//存在,跳转链接
-					return "redirect:modules/mobile/home.html";
-					
-					//不存在，跳至绑定页面
-					
 				}
 			}
 		}
+		//跳转至患者首页
+		return "redirect:modules/mobile/home.html";
+		
 	}
 	
 	/**
