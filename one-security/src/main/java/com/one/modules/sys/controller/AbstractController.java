@@ -11,7 +11,7 @@ import com.one.modules.sys.entity.SysUserEntity;
  * 
  * @author zy
  * @email 553224182@qq.com
- * @date 2016年11月9日 下午9:42:26
+ * @date 2016年11月9日 下午9:42:27
  */
 public abstract class AbstractController {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
