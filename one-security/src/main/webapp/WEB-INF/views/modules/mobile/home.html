@@ -12,6 +12,16 @@
 	    <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
 	    <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
 	    
+	    <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap-table.min.css">
+		<link rel="stylesheet" href="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.css">
+		<script src="${request.contextPath}/statics/libs/bootstrap-table.min.js"></script>
+		<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.min.js"></script>
+		<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+		<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
+		<script src="${request.contextPath}/statics/plugins/treegrid/tree.table.js"></script>
+	    
+	    
+	    
 		<style type="text/css">
 			.info-box-text {
 				white-space: normal !important;
@@ -46,7 +56,7 @@
                 <i class="fa fa-users"></i> 我的成员
               </a>
               <a class="btn btn-app" style="background-color: #f39c12;">
-                <i class="fa fa-book"></i> 个人信息
+                <i class="fa fa-book" @click="aaaaa()"></i> 个人信息
               </a>
               <a class="btn btn-app" style="background-color: #f56954;">
                 <i class="fa fa-user-md"></i> 普查结果
@@ -126,7 +136,19 @@
 				},
 				goUrl:function(){
 					parent.location.href ='my_info.html';
-				}
+				},
+				aaaaa: function(){
+					
+					alert("111111");
+					
+	                $.ajax({
+	                    type: "POST",
+	                    url: baseURL + "sys/baspatient/text",
+	                    success: function(r){
+	                    }
+	                });
+	                alert("22222s");
+		        }
 			},
 			created: function(){
 				this.getUser();

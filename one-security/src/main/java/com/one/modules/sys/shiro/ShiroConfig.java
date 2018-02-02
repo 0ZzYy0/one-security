@@ -66,6 +66,7 @@ public class ShiroConfig {
         filterMap.put("/login.html", "anon");
         filterMap.put("/error.html", "anon");
         filterMap.put("/sys/login", "anon");
+        filterMap.put("/baspatient", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/oAuth2", "anon");

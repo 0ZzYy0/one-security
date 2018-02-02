@@ -112,7 +112,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	public void addUser(SNSUserInfo snsUserInfo) {
+	public void addUser(SNSUserInfo snsUserInfo,String infoId,String operateTable) {
 		SysUserEntity user = new SysUserEntity();
 		user.setUsername(snsUserInfo.getOpenId());
 		user.setPassword("123456");
@@ -122,7 +122,8 @@ public class SysUserServiceImpl implements SysUserService {
 		user.setCreateTime(new Date());
 		user.setStatus(1);
 		user.setDeptId((long) 13);
-		
+		user.setInfoId(infoId);
+		user.setOperateTable(operateTable);
 		List<Long> roleIdList = new ArrayList<Long>();
 		roleIdList.add((long) 3);
 		user.setRoleIdList(roleIdList);
