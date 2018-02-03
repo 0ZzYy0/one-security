@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.one.modules.sys.dao.BasDoctorDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.one.modules.sys.entity.BasDoctorEntity" id="basDoctorMap">
+        <result property="docId" column="doc_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="docName" column="doc_name"/>
+        <result property="contactWay" column="contact_way"/>
+        <result property="dpetId" column="dpet_id"/>
+        <result property="jobNum" column="job_num"/>
+        <result property="docAddress" column="doc_address"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.one.modules.sys.entity.BasDoctorEntity">
+		select * from bas_doctor where doc_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.one.modules.sys.entity.BasDoctorEntity">
+		select * from bas_doctor
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by doc_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bas_doctor 
+	</select>
+	 
+	<insert id="save" parameterType="com.one.modules.sys.entity.BasDoctorEntity">
+		insert into bas_doctor
+		(
+			`doc_id`, 
+			`dept_id`, 
+			`doc_name`, 
+			`contact_way`, 
+			`dpet_id`, 
+			`job_num`, 
+			`doc_address`, 
+			`remark`
+		)
+		values
+		(
+			#{docId}, 
+			#{deptId}, 
+			#{docName}, 
+			#{contactWay}, 
+			#{dpetId}, 
+			#{jobNum}, 
+			#{docAddress}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.one.modules.sys.entity.BasDoctorEntity">
+		update bas_doctor 
+		<set>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="docName != null">`doc_name` = #{docName}, </if>
+			<if test="contactWay != null">`contact_way` = #{contactWay}, </if>
+			<if test="dpetId != null">`dpet_id` = #{dpetId}, </if>
+			<if test="jobNum != null">`job_num` = #{jobNum}, </if>
+			<if test="docAddress != null">`doc_address` = #{docAddress}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where doc_id = #{docId}
+	</update>
+	
+	<delete id="delete">
+		delete from bas_doctor where doc_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bas_doctor where doc_id in 
+		<foreach item="docId" collection="array" open="(" separator="," close=")">
+			#{docId}
+		</foreach>
+	</delete>
+
+</mapper>
