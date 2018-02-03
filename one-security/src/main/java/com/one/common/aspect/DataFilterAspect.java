@@ -79,6 +79,7 @@ public class DataFilterAspect {
         }
         filterSql.append(")");
 
+        System.out.println(filterSql.toString());
         return filterSql.toString();
     }
 }

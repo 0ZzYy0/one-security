@@ -88,7 +88,7 @@ public class SysMobileLoginController {
 							basPatientEntity.setPatId(Long.parseLong(calendar.getTime().getTime() + ""));
 							basPatientService.save(basPatientEntity);
 							//新增用户
-							sysUserService.addUser(snsUserInfo,calendar.getTime().getTime() + "","bas_patient");
+							sysUserService.addUser(snsUserInfo,calendar.getTime().getTime(),"bas_patient");
 							Subject subject = ShiroUtils.getSubject();
 							UsernamePasswordToken token = new UsernamePasswordToken(openId, "123456");
 							subject.login(token);

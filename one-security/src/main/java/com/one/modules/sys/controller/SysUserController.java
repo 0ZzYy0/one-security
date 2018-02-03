@@ -14,11 +14,14 @@ import com.one.common.validator.Assert;
 import com.one.common.validator.ValidatorUtils;
 import com.one.common.validator.group.AddGroup;
 import com.one.common.validator.group.UpdateGroup;
+import com.one.modules.sys.entity.BasDoctorEntity;
 import com.one.modules.sys.entity.SysUserEntity;
+import com.one.modules.sys.service.BasDoctorService;
 import com.one.modules.sys.service.SysUserRoleService;
 import com.one.modules.sys.service.SysUserService;
 import com.one.modules.sys.shiro.ShiroUtils;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +39,8 @@ public class SysUserController extends AbstractController {
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
+	@Autowired
+	private BasDoctorService basDoctorService;
 	
 	/**
 	 * 所有用户列表
@@ -106,6 +111,18 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
+
+		Calendar calendar = Calendar.getInstance();
+		Long doctorId=calendar.getTime().getTime();
+
+		if(user.getOperateTable() != null && user.getOperateTable().equals("bas_doctor")){
+			BasDoctorEntity doctor = new BasDoctorEntity();
+			
+			user.setInfoId(doctorId);
+			doctor.setDocId(doctorId);
+			
+			basDoctorService.save(doctor);
+		}
 		
 		sysUserService.save(user);
 		

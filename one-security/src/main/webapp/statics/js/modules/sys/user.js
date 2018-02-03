@@ -69,8 +69,23 @@ var vm = new Vue({
             status:1,
             deptId:null,
             deptName:null,
+            operateTable:null,
             roleIdList:[]
-        }
+        },
+        typeList:[
+                  {
+              		name: "正常",
+              		value: null
+              	},
+              	{
+              		name: "医生",
+              		value: "bas_doctor"
+              	},
+              	{
+              		name: "患者",
+              		value: "bas_patient"
+              	}
+              ]
     },
     methods: {
         query: function () {

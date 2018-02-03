@@ -78,5 +78,5 @@ public interface SysUserService {
 	/**
 	 * 第一次微信登录，新增用户
 	 */
-	void addUser(SNSUserInfo snsUserInfo,String infoId,String operateTable);
+	void addUser(SNSUserInfo snsUserInfo,Long infoId,String operateTable);
 }
