@@ -39,7 +39,7 @@
 	<body>
 	<div class="content-wrapper" id="rrapp" style="margin-left: 0px;">
 	<section class="content">
-	<div class="row">
+	<div class="row" style="border: none">
         <div class="col-md-12">
            <div class="box box-widget widget-user">
             <div class="widget-user-header bg-aqua-active">
@@ -54,10 +54,10 @@
             <div class="box box-widget">
             <div class="box-body">
               <a class="btn btn-app" style="background-color: #39CCCC;">
-                <i class="fa fa-users"></i> 我的成员
+                <i class="fa fa-users" @click="toMyMemberList"></i> 家庭成员
               </a>
               <a class="btn btn-app" style="background-color: #f39c12;">
-                <i class="fa fa-book" @click="aaaaa()"></i> 个人信息
+                <i class="fa fa-book" @click="toMyInfo"></i> 个人信息
               </a>
               <a class="btn btn-app" style="background-color: #f56954;">
                 <i class="fa fa-user-md"></i> 普查结果
@@ -137,8 +137,11 @@
 				goUrl:function(){
 					parent.location.href ='my_info.html';
 				},
-				aaaaa: function(){
+				toMyInfo: function(){
 					window.location.href = "${request.contextPath}/baspatient/toMyInfo";
+		        },
+		        toMyMemberList: function(){
+		        	window.location.href = "${request.contextPath}/baspatmember/toMyMemberList";
 		        }
 			},
 			created: function(){

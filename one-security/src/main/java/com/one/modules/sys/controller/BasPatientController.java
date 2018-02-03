@@ -124,7 +124,6 @@ public class BasPatientController {
 	public R queryInfoByPatientID(){
 		SysUserEntity user = sysUserService.queryObject(ShiroUtils.getUserId());
 		BasPatientEntity basPatient = basPatientService.queryObject(user.getInfoId());
-		System.out.println(basPatient);
 		return R.ok().put("basPatient", basPatient);
 	}
 	

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.one.modules.sys.dao.BasPatMemberDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.one.modules.sys.entity.BasPatMemberEntity" id="basPatMemberMap">
+        <result property="memberId" column="member_id"/>
+        <result property="patId" column="pat_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="memberCode" column="member_code"/>
+        <result property="memberName" column="member_name"/>
+        <result property="memberAge" column="member_age"/>
+        <result property="memberGender" column="member_gender"/>
+        <result property="memberType" column="member_type"/>
+        <result property="contactWay" column="contact_way"/>
+        <result property="memberAddress" column="member_address"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.one.modules.sys.entity.BasPatMemberEntity">
+		select * from bas_pat_member where member_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.one.modules.sys.entity.BasPatMemberEntity">
+		select * from bas_pat_member
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by member_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bas_pat_member 
+	</select>
+	 
+	<insert id="save" parameterType="com.one.modules.sys.entity.BasPatMemberEntity">
+		insert into bas_pat_member
+		(
+			`member_id`, 
+			`pat_id`, 
+			`dept_id`, 
+			`member_code`, 
+			`member_name`, 
+			`member_age`, 
+			`member_gender`, 
+			`member_type`, 
+			`contact_way`, 
+			`member_address`, 
+			`remark`
+		)
+		values
+		(
+			#{memberId}, 
+			#{patId}, 
+			#{deptId}, 
+			#{memberCode}, 
+			#{memberName}, 
+			#{memberAge}, 
+			#{memberGender}, 
+			#{memberType}, 
+			#{contactWay}, 
+			#{memberAddress}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.one.modules.sys.entity.BasPatMemberEntity">
+		update bas_pat_member 
+		<set>
+			<if test="patId != null">`pat_id` = #{patId}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="memberCode != null">`member_code` = #{memberCode}, </if>
+			<if test="memberName != null">`member_name` = #{memberName}, </if>
+			<if test="memberAge != null">`member_age` = #{memberAge}, </if>
+			<if test="memberGender != null">`member_gender` = #{memberGender}, </if>
+			<if test="memberType != null">`member_type` = #{memberType}, </if>
+			<if test="contactWay != null">`contact_way` = #{contactWay}, </if>
+			<if test="memberAddress != null">`member_address` = #{memberAddress}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where member_id = #{memberId}
+	</update>
+	
+	<delete id="delete">
+		delete from bas_pat_member where member_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bas_pat_member where member_id in 
+		<foreach item="memberId" collection="array" open="(" separator="," close=")">
+			#{memberId}
+		</foreach>
+	</delete>
+	<select id="queryMyMemberList" resultType="com.one.modules.sys.entity.BasPatMemberEntity" parameterType="map">
+		select * from bas_pat_member where pat_Id = #{patId}
+	</select>
+</mapper>
