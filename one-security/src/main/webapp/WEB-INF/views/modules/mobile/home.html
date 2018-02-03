@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>首页</title>
+		<#include "/header.html">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -119,7 +120,6 @@
 	  <script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
 	  <script src="${request.contextPath}/statics/libs/app.js"></script>
 	  <script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
-
 		<script>
 		$(document).ready(function() {
 		});
@@ -138,16 +138,7 @@
 					parent.location.href ='my_info.html';
 				},
 				aaaaa: function(){
-					
-					alert("111111");
-					
-	                $.ajax({
-	                    type: "POST",
-	                    url: baseURL + "/baspatient/text",
-	                    success: function(r){
-	                    }
-	                });
-	                alert("22222s");
+					window.location.href = "${request.contextPath}/baspatient/toMyInfo";
 		        }
 			},
 			created: function(){

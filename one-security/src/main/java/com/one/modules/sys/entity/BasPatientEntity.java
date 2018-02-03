@@ -159,4 +159,13 @@ public class BasPatientEntity implements Serializable {
 	public String getRemark() {
 		return remark;
 	}
+	@Override
+	public String toString() {
+		return "BasPatientEntity [patId=" + patId + ", deptId=" + deptId
+				+ ", patCode=" + patCode + ", patType=" + patType
+				+ ", patName=" + patName + ", patAge=" + patAge
+				+ ", patGender=" + patGender + ", contactWay=" + contactWay
+				+ ", patAddress=" + patAddress + ", remark=" + remark + "]";
+	}
+	
 }

@@ -19,6 +19,8 @@ public interface SysDeptService {
 	SysDeptEntity queryObject(Long deptId);
 	
 	List<SysDeptEntity> queryList(Map<String, Object> map);
+	
+	List<SysDeptEntity> queryAllList(Map<String, Object> map);
 
 	void save(SysDeptEntity sysDept);
 	

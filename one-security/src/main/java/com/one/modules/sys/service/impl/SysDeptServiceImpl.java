@@ -30,6 +30,11 @@ public class SysDeptServiceImpl implements SysDeptService {
 	}
 	
 	@Override
+	public List<SysDeptEntity> queryAllList(Map<String, Object> map){
+		return sysDeptDao.queryList(map);
+	}
+	
+	@Override
 	public void save(SysDeptEntity sysDept){
 		sysDeptDao.save(sysDept);
 	}

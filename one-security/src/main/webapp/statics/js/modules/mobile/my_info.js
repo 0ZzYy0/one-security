@@ -1,23 +1,73 @@
 $(function () {
+
 });
 
+
+
+
+/*var deptRows = [
+                {name:"1",id:"1"},
+                {name:"2",id:"2"}
+                ];*/
+
+
 var vm = new Vue({
-	el:'#rrapp',
+	el:'#myinfo_div',
 	data:{
 		title: null,
-		basPatient: {}
+		basPatient:{
+			patId : "",
+			deptId : "",
+			patCode : "",
+			patType : "",
+			patName : "",
+			patAge : "",
+			patGender : "",
+			contactWay : "",
+			patAddress : "",
+			remark : ""
+		},
+		deptList:[],
+		patTypeList:[],
+		patGenderList:[]
+	},
+    created:function () {
+    	var deptRowss;
+        $.ajax({
+            type: "GET",
+            url: baseURL + "baspatient/getDeptSelect",
+            async:false,
+            success: function(data){
+        		var deptRows = '[';
+        		for(var i = 0 ; i < data.length ; i++){
+        			deptRows += '{name:\''+data[i].name+'\',id:\''+data[i].deptId+'\'},';
+        		}
+        		deptRows = deptRows.substring(0, deptRows.length - 1);
+        		deptRows += ']';
+        		deptRowss = eval("("+deptRows+")");
+            }
+        });
+
+		this.deptList = deptRowss;
+        this.basPatient.deptId = this.deptList.length>0 ? this.deptList[0].id : "";
+        
+        
+        var patTypeRows = [{name:"学生",id:"学生"},{name:"成人",id:"成人"}];
+        this.patTypeList = patTypeRows;
+        this.basPatient.patType = this.patTypeList.length>0 ? this.patTypeList[0].id : "";
+        
+        var patGenderRows = [{name:"男",id:"男"},{name:"女",id:"女"}];
+        this.patGenderList = patGenderRows;
+        this.patGenderList.patType = this.patGenderList.length>0 ? this.patGenderList[0].id : "";
+    },
+	mounted: function () {
+		  this.$nextTick(function () {
+			  this.getInfo();
+		  });
 	},
 	methods: {
-		update: function (event) {
-			var patId = getSelectedRow();
-			if(patId == null){
-				return ;
-			}
-            vm.title = "修改";
-            vm.getInfo(patId)
-		},
 		saveOrUpdate: function (event) {
-			var url = vm.basPatient.patId == null ? "baspatient/save" : "baspatient/update";
+			var url = "baspatient/update";
 			$.ajax({
 				type: "POST",
 			    url: baseURL + url,
@@ -25,8 +75,7 @@ var vm = new Vue({
 			    data: JSON.stringify(vm.basPatient),
 			    success: function(r){
 			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
+						alert('保存成功', function(index){
 						});
 					}else{
 						alert(r.msg);
@@ -34,16 +83,33 @@ var vm = new Vue({
 				}
 			});
 		},
-		getInfo: function(patId){
-			$.get(baseURL + "baspatient/info/"+patId, function(r){
-                vm.basPatient = r.basPatient;
+		getInfo:function (){
+            $.get(baseURL + "baspatient/getInfo", function(r){
+            	vm.basPatient = r.basPatient;
+            	vm.getDeptSelect();
             });
 		},
-		reload: function (event) {
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
-                page:page
-            }).trigger("reloadGrid");
+		getDeptSelect:function (){
+			if(vm.basPatient.patType != null && vm.basPatient.patType != ""){
+		    	var deptRowss;
+		        $.ajax({
+		            type: "GET",
+		            url: baseURL + "baspatient/getDeptSelect",
+		            async:false,
+		            success: function(data){
+		        		var deptRows = '[';
+		        		for(var i = 0 ; i < data.length ; i++){
+		            		if((vm.basPatient.patType == "学生" && data[i].deptType == "学校") || (vm.basPatient.patType == "成人" && data[i].deptType == "社区")){
+		            			deptRows += '{name:\''+data[i].name+'\',id:\''+data[i].deptId+'\'},';
+		            		}
+		        		}
+	        			deptRows = deptRows.substring(0, deptRows.length - 1);
+	        			deptRows += ']';
+        				deptRowss = eval("("+deptRows+")");
+		            }
+		        });
+		        this.deptList = deptRowss;
+			}
 		}
 	}
 });
