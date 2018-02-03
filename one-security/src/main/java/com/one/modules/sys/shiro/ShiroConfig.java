@@ -66,11 +66,14 @@ public class ShiroConfig {
         filterMap.put("/login.html", "anon");
         filterMap.put("/error.html", "anon");
         filterMap.put("/sys/login", "anon");
+        filterMap.put("/baspatient", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/oAuth2", "anon");
         filterMap.put("/bindDoc", "anon");
         filterMap.put("/modules/mobile/home.html", "anon");
+        filterMap.put("/modules/mobile/bind_doctor.html", "anon");
+        filterMap.put("/modules/mobile/home_doctor.html", "anon");
         filterMap.put("/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
