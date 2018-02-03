@@ -15,6 +15,14 @@
 <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
 <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
 <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+<link rel="stylesheet" href="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.css">
+
+<script src="${request.contextPath}/statics/libs/bootstrap-table.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
+<script src="${request.contextPath}/statics/plugins/treegrid/tree.table.js"></script>
+
 <style>
 /*a  upload */
 .a-upload {
@@ -50,130 +58,91 @@
     text-decoration: none
 }
 </style>
-
 </head>
 <body>
+
 <div class="content-wrapper" style="margin-left: 0px;">
-<section class="content">
-	<div class="box box-warning">
-      <div class="box-header with-border">
-        <!-- <h3 class="box-title">Direct Chat</h3> -->
 
-        <div class="pull-left">
-       	 <button type="button" class="btn btn-box-tool" onclick="goList();"><i class="fa fa-chevron-left"></i></button>
-        </div>
-      </div>	  
-	  <div class="box-body">
-	   <form role="form" id="infoFrm">
-	   	   <input type="hidden" name="patInfo.patType" id="patType" value="01" />
-	       <div class="form-group">
-	         <label>姓名</label>
-	         <input type="text" id="patName" name="patInfo.patName" class="form-control" placeholder="姓名 ">
-	       </div>
-	       <div class="form-group">
-	         <label>年龄</label>
-	         <input type="number" id="patAge" name="patInfo.patAge" class="form-control" placeholder="年龄 ">
-	       </div>
-           <div class="form-group">
-	         <label>手机号</label>
-	         <input type="number" id="patAge" name="patInfo.patAge" class="form-control" placeholder="手机号 ">
-           </div>
-	       <div class="form-group">
-	         	<label>性别</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
-                <label>
-                  <input type="radio" name="patInfo.patGender" value="01" checked="checked">男
-                </label>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <label>
-                  <input type="radio" name="patInfo.patGender"  value="02">女
-                </label>
-	       </div>
-       	</form>
-           <form id="imgFrm">    
-	       <div class="form-group">
-	         <label>普查照片</label><!-- （<font class="text-red">长按图片删除</font>） -->
-	         	<div id="upload-img-div">
-	         		<label>A区（右上方）</label>
-	         	    <div class="row" id="showImg">
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-              		</div>
-              		
-	         		<label>B区（左上方）</label>
-	         	    <div class="row" id="showImg">
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-              		</div>
-	         		<label>C区（左下方）</label>
-	         	    <div class="row" id="showImg">
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-              		</div>
-	         		<label>D区（右下方）</label>
-	         	    <div class="row" id="showImg">
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-	         	    	<div class="col-md-3 col-xs-3">
-                    		<img class="img-responsive pad" src="${request.contextPath}/statics/images/aaa.jpg">
-	         	    	</div>
-              		</div>
-				</div>
-	       </div>
-	       </form>
-	  </div>
-	<div class="box-footer">
-		<button id="clearCont" type="button" class="btn btn-default" onclick="reloadCont();">返回</button>
-		<button id="saveInfo" type="button" class="btn btn-info pull-right" onclick="doSubmit(this);">保存</button>
+
+
+
+
+
+
+
+
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+		</div>
+    </div>
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<div class="col-sm-2 control-label">机构编号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.deptId" placeholder="机构编号"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">患者code</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.patCode" placeholder="患者code"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">患者类型</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.patType" placeholder="患者类型"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">患者姓名</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.patName" placeholder="患者姓名"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">患者年龄</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.patAge" placeholder="患者年龄"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">患者性别</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.patGender" placeholder="患者性别"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">联系方式</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.contactWay" placeholder="联系方式"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">家庭住址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.patAddress" placeholder="家庭住址"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="basPatient.remark" placeholder="备注"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
 	</div>
-	</div>
-</section>
 </div>
+
+<script src="${request.contextPath}/statics/js/modules/mobile/my_info.js"></script>
 </body>
-
-<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
-<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
-<script src="${request.contextPath}/statics/libs/router.js"></script>
-<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
-<script src="${request.contextPath}/statics/libs/app.js"></script>
-<script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
-
 </html>

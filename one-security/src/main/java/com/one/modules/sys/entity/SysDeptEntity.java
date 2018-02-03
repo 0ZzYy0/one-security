@@ -24,6 +24,12 @@ public class SysDeptEntity implements Serializable {
 	private String deptType;
 	//部门名称
 	private String name;
+	//省
+	private String province;
+	//市
+	private String city;
+	//区
+	private String district;
 	//机构地址
 	private String deptAddress;
 	//负责人
@@ -158,6 +164,30 @@ public class SysDeptEntity implements Serializable {
 
 	public void setDeptAddress(String deptAddress) {
 		this.deptAddress = deptAddress;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 	
 }

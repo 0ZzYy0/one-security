@@ -31,6 +31,9 @@
 			`parent_id`,
 			`dept_code`, 
 			`dept_type`, 
+			`province`, 
+			`city`, 
+			`district`, 
 			`dept_address`, 
 			`name`, 
 			`dept_person`,
@@ -40,7 +43,10 @@
 		(
 			#{parentId}, 
 			#{deptCode}, 
-			#{deptType}, 
+			#{deptType},
+			#{province}, 
+			#{city}, 
+			#{district}, 
 			#{deptAddress}, 
 			#{name}, 
 			#{deptPerson}, 
@@ -56,6 +62,9 @@
 			<if test="deptCode != null">`dept_code` = #{deptCode}, </if>
 			<if test="deptType != null">`dept_type` = #{deptType}, </if>
 			<if test="deptPerson != null">`dept_person` = #{deptPerson}, </if>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="district != null">`district` = #{district}, </if>
 			<if test="deptPerson != null">`dept_address` = #{deptAddress}, </if>
 			<if test="orderNum != null">`order_num` = #{orderNum}</if>
 		</set>

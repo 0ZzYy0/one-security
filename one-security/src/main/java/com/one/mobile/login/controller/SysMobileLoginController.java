@@ -3,6 +3,7 @@ package com.one.mobile.login.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.one.common.utils.ConfigConstant;
 import com.one.common.utils.R;
 import com.one.mobile.login.config.WxStorageConfig;
+import com.one.modules.sys.entity.BasPatientEntity;
 import com.one.modules.sys.entity.SysUserEntity;
+import com.one.modules.sys.service.BasPatientService;
 import com.one.modules.sys.service.SysConfigService;
 import com.one.modules.sys.service.SysUserService;
 import com.one.modules.sys.shiro.ShiroUtils;
@@ -41,6 +44,8 @@ public class SysMobileLoginController {
 	private SysUserService sysUserService;
     @Autowired
     private SysConfigService sysConfigService;
+    @Autowired
+    private BasPatientService basPatientService;
     
     private final static String KEY = ConfigConstant.WX_CONFIG_KEY;
     
@@ -76,7 +81,14 @@ public class SysMobileLoginController {
 							subject.login(token);
 						}else{
 							//用户不存在
-							sysUserService.addUser(snsUserInfo);
+							
+							//新增用户的同时也新增一条患者信息
+							BasPatientEntity basPatientEntity = new BasPatientEntity();
+							Calendar calendar = Calendar.getInstance();
+							basPatientEntity.setPatId(Long.parseLong(calendar.getTime().getTime() + ""));
+							basPatientService.save(basPatientEntity);
+							//新增用户
+							sysUserService.addUser(snsUserInfo,calendar.getTime().getTime() + "","bas_patient");
 							Subject subject = ShiroUtils.getSubject();
 							UsernamePasswordToken token = new UsernamePasswordToken(openId, "123456");
 							subject.login(token);

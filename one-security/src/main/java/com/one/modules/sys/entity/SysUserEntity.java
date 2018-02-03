@@ -100,7 +100,7 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 关联表id
 	 */
-	private String infoId;
+	private Long infoId;
 	
 	/**
 	 * 关联表名称
@@ -274,11 +274,11 @@ public class SysUserEntity implements Serializable {
 		this.headImgUrl = headImgUrl;
 	}
 
-	public String getInfoId() {
+	public Long getInfoId() {
 		return infoId;
 	}
 
-	public void setInfoId(String infoId) {
+	public void setInfoId(Long infoId) {
 		this.infoId = infoId;
 	}
 
