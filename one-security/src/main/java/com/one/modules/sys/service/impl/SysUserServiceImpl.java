@@ -112,7 +112,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	public void addUser(SNSUserInfo snsUserInfo,String infoId,String operateTable) {
+	public void addUser(SNSUserInfo snsUserInfo,Long infoId,String operateTable) {
 		SysUserEntity user = new SysUserEntity();
 		user.setUsername(snsUserInfo.getOpenId());
 		user.setPassword("123456");
