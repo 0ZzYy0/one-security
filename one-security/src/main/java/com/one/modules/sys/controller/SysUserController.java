@@ -73,14 +73,14 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/password")
 	public R password(String password, String newPassword){
 		Assert.isBlank(newPassword, "新密码不为能空");
-
+		String remark = newPassword;
 		//原密码
 		password = ShiroUtils.sha256(password, getUser().getSalt());
 		//新密码
 		newPassword = ShiroUtils.sha256(newPassword, getUser().getSalt());
 				
 		//更新密码
-		int count = sysUserService.updatePassword(getUserId(), password, newPassword);
+		int count = sysUserService.updatePassword(getUserId(), password, newPassword,remark);
 		if(count == 0){
 			return R.error("原密码不正确");
 		}

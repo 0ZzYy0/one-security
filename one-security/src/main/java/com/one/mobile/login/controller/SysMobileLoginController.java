@@ -10,6 +10,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,14 +107,78 @@ public class SysMobileLoginController {
 	}
 	
 	/**
+	 * 医生授权登录
+	 */
+	@RequestMapping(value = "oAuth2Doctor")
+	public String oAuth2Doctor(HttpServletResponse response,HttpServletRequest request)throws IOException {
+
+		System.out.println("--------------------------oAuth2Doctor授权------------------------------");
+		WxStorageConfig config = sysConfigService.getConfigObject(KEY, WxStorageConfig.class);
+
+		String appid = config.getAppId();
+		String appsecret = config.getAppSecrect();
+		//String oAuth2Url = config.getoAuth2Url();
+		String returnStr = "";
+		if(!"".equals(appid) && !"".equals(appsecret)){
+			String code = request.getParameter("code");
+			if (code != null && !"".equals(code)){
+				WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(appid, appsecret, code);
+				if(weixinOauth2Token!=null){
+					String accessToken = weixinOauth2Token.getAccessToken();
+					String openId = weixinOauth2Token.getOpenId();
+					SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
+					ShiroUtils.getSession().setAttribute("snsUserInfo", snsUserInfo);
+					
+					if(snsUserInfo != null){
+						SysUserEntity user = sysUserService.queryByUserOpenId(openId,"bas_doctor");
+						
+						if(user != null){
+							//用户存在
+							Subject subject = ShiroUtils.getSubject();
+							UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getRemark());
+							subject.login(token);
+
+							returnStr = "redirect:modules/mobile/home_doctor.html";
+						}else{
+							returnStr = "redirect:modules/mobile/bind_doctor.html";
+						}
+					}
+				}
+			}
+		}
+		return returnStr;
+		
+	}
+	
+	/**
 	 * 绑定
 	 */
-/*	@ResponseBody
-	@RequestMapping(value = "/bindDoc", method = RequestMethod.POST)
-	public R saveBindMobile(HttpServletResponse response,HttpServletRequest request)throws IOException {
-		String jobNum = request.getParameter("jobNum");
-	    
+	@ResponseBody
+	@RequestMapping(value = "/bindDoc")
+	public R bindDoc(HttpServletResponse response,HttpServletRequest request,String username, String password)throws IOException {
+		
+		try{
+			Subject subject = ShiroUtils.getSubject();
+			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+			subject.login(token);
+		}catch (UnknownAccountException e) {
+			return R.error(e.getMessage());
+		}catch (IncorrectCredentialsException e) {
+			return R.error("账号或密码不正确");
+		}catch (LockedAccountException e) {
+			return R.error("账号已被锁定,请联系管理员");
+		}catch (AuthenticationException e) {
+			return R.error("账户验证失败");
+		}
+		SNSUserInfo snsUserInfo = (SNSUserInfo) ShiroUtils.getSession().getAttribute("snsUserInfo");
+		
+		ShiroUtils.getUserEntity().setOpenId(snsUserInfo.getOpenId());
+		ShiroUtils.getUserEntity().setNickName(snsUserInfo.getNickname());
+		ShiroUtils.getUserEntity().setHeadImgUrl(snsUserInfo.getHeadImgUrl());
+		
+		SysUserEntity user = ShiroUtils.getUserEntity();
+		
+		sysUserService.updateWxInfo(user);
 		return R.ok();
-	}*/
-	
+	}
 }

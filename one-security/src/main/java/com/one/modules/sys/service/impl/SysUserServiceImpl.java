@@ -71,6 +71,8 @@ public class SysUserServiceImpl implements SysUserService {
 	@Override
 	@Transactional
 	public void save(SysUserEntity user) {
+		
+		user.setRemark(user.getPassword());
 		user.setCreateTime(new Date());
 		//sha256加密
 		String salt = RandomStringUtils.randomAlphanumeric(20);
@@ -87,7 +89,9 @@ public class SysUserServiceImpl implements SysUserService {
 	public void update(SysUserEntity user) {
 		if(StringUtils.isBlank(user.getPassword())){
 			user.setPassword(null);
+			user.setRemark(null);
 		}else{
+			user.setRemark(user.getPassword());
 			user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
 		}
 		sysUserDao.update(user);
@@ -103,11 +107,12 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	public int updatePassword(Long userId, String password, String newPassword) {
+	public int updatePassword(Long userId, String password, String newPassword,String remark) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", userId);
 		map.put("password", password);
 		map.put("newPassword", newPassword);
+		map.put("remark", remark);
 		return sysUserDao.updatePassword(map);
 	}
 
@@ -129,6 +134,20 @@ public class SysUserServiceImpl implements SysUserService {
 		user.setRoleIdList(roleIdList);
 		
 		this.save(user);
+	}
+
+	@Override
+	public SysUserEntity queryByUserOpenId(String openId,String operateTable) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("openId", openId);
+		map.put("operateTable", operateTable);
+		return sysUserDao.queryByUserOpenId(map);
+	}
+
+	@Override
+	public void updateWxInfo(SysUserEntity user) {
+		sysUserDao.update(user);
 	}
 
 }

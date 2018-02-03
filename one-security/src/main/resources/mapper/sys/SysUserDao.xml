@@ -76,7 +76,8 @@
 			`head_img_url`,
 			`info_id`,
 			`operate_table`,
-			`create_time`
+			`create_time`,
+			`remark`
 		)
 		values
 		(
@@ -93,7 +94,8 @@
 			#{headImgUrl},
 			#{infoId},
 			#{operateTable},
-			#{createTime}
+			#{createTime},
+			#{remark}
 		)
 	</insert>
 	 
@@ -111,12 +113,13 @@
 			<if test="headImgUrl != null">`head_img_url` = #{headImgUrl}, </if>
 			<if test="infoId != null">`info_id` = #{infoId}, </if>
 			<if test="operateTable != null">`operate_table` = #{operateTable}, </if>
+			<if test="operateTable != null">`remark` = #{remark}, </if>
 		</set>
 		where user_id = #{userId}
 	</update>
 	
 	<update id="updatePassword" parameterType="map">
-		update sys_user set `password` = #{newPassword} 
+		update sys_user set `password` = #{newPassword},`remark` = #{remark} 
 			where user_id = #{userId} and password = #{password}
 	</update>
 	
@@ -131,5 +134,8 @@
 			#{userId}
 		</foreach>
 	</delete>
-
+	
+	<select id="queryByUserOpenId" resultType="com.one.modules.sys.entity.SysUserEntity" parameterType="map">
+		select * from sys_user where open_id = #{openId} and operate_table = #{operateTable}
+	</select>
 </mapper>

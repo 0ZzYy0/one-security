@@ -106,6 +106,12 @@ public class SysUserEntity implements Serializable {
 	 * 关联表名称
 	 */
 	private String operateTable;
+	
+	/**
+	 * 备注
+	 */
+	private String remark;
+	
 	/**
 	 * 设置：
 	 * @param userId 
@@ -288,6 +294,14 @@ public class SysUserEntity implements Serializable {
 
 	public void setOperateTable(String operateTable) {
 		this.operateTable = operateTable;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 }

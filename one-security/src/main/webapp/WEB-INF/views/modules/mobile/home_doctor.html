@@ -30,25 +30,33 @@
 	<section class="content">
 	<div class="row">
         <div class="col-md-12">
-           <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-aqua-active">
+           <div class="box box-widget widget-user-2">
+            <!-- <div class="widget-user-header bg-blue-active">
               <h3 class="widget-user-username">{{user.nickName}}</h3>
-              <h5 class="widget-user-desc"></h5>
+              <h5 class="widget-user-desc">德尔美齿</h5>
             </div>
             <div class="widget-user-image">
               <img class="img-circle" :src="user.headImgUrl" @click="goUrl">
             </div>
             <div class="box-footer" style="height: 40px;">
+            </div>-->
+            <div class="widget-user-header bg-light-blue">
+              <div class="widget-user-image">
+                <img class="img-circle" :src="user.headImgUrl" @click="goUrl">
+              </div>
+              <!-- /.widget-user-image -->
+              <h3 class="widget-user-username">{{user.nickName}}</h3>
+              <h5 class="widget-user-desc">德尔美齿</h5>
             </div>
             <div class="box box-widget">
             <div class="box-body">
-              <a class="btn btn-app" style="background-color: #39CCCC;">
-                <i class="fa fa-users"></i> 我的成员
+              <a class="btn btn-app bg-teal-active">
+                <i class="fa fa-users"></i> 开始普查
               </a>
-              <a class="btn btn-app" style="background-color: #f39c12;">
+              <a class="btn btn-app bg-orange-active">
                 <i class="fa fa-book"></i> 个人信息
               </a>
-              <a class="btn btn-app" style="background-color: #f56954;">
+              <a class="btn btn-app bg-olive-active">
                 <i class="fa fa-user-md"></i> 普查结果
               </a>
              </div>
@@ -62,7 +70,7 @@
                     <a href="javascript:void(0)" class="product-title">最新通知
                       <span class="label label-warning pull-right">2018-01-09</span></a>
                         <span class="product-description">
-                          牙防工程进度报告...
+                          		牙防工程进度报告...
                         </span>
                   </div>
                 </li>
@@ -75,7 +83,7 @@
                     <a href="javascript:void(0)" class="product-title">通知
                       <span class="label label-info pull-right">2018-01-01</span></a>
                         <span class="product-description">
-                          最新公告1
+                          	医生须知
                         </span>
                   </div>
                 </li>
@@ -89,7 +97,7 @@
                     	<span class="label label-danger pull-right">2018-01-03</span>
                     </a>
                         <span class="product-description">
-                         最新公告2
+                         		普查手册
                         </span>
                   </div>
                 </li>

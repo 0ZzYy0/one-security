@@ -73,10 +73,22 @@ public interface SysUserService {
 	 * @param password     原密码
 	 * @param newPassword  新密码
 	 */
-	int updatePassword(Long userId, String password, String newPassword);
+	int updatePassword(Long userId, String password, String newPassword,String remark);
 	
 	/**
 	 * 第一次微信登录，新增用户
 	 */
 	void addUser(SNSUserInfo snsUserInfo,Long infoId,String operateTable);
+
+	/**
+	 * 根据openid查询用户
+	 */
+	SysUserEntity queryByUserOpenId(String openId,String operateTable);
+	
+
+	/**
+	 * 修改用户微信信息
+	 */
+	void updateWxInfo(SysUserEntity user);
+	
 }
