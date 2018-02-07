@@ -52,19 +52,19 @@
 					</div>
 					<div class="form-group">
 						<label>成员性别</label><br>
-						<select v-model="basPatMember.memberGender" class='form-control'>
+						<select v-model="basPatMember.memberGender" class="form-control">
 					        <option v-for="item in patGenderList" :value="item.id">{{item.name}}</option>
 					    </select>
 					</div>
 					<div class="form-group">
 						<label>成员类型</label><br>
-						<select v-model="basPatMember.memberType" @change="getDeptSelect" class='form-control'>
+						<select v-model="basPatMember.memberType" @change="getDeptSelect" class="form-control">
 					        <option v-for="item in patTypeList" :value="item.id">{{item.name}}</option>
 					    </select>
 					</div>
 					<div class="form-group">
 						<label>选择机构</label>
-						<select v-model="basPatMember.deptId"  class='form-control'>
+						<select v-model="basPatMember.deptId"  class="form-control">
 					        <option v-for="item in deptList" :value="item.id">{{item.name}}</option>
 					    </select>
 					</div>

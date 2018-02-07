@@ -15,13 +15,18 @@ import com.one.common.validator.ValidatorUtils;
 import com.one.common.validator.group.AddGroup;
 import com.one.common.validator.group.UpdateGroup;
 import com.one.modules.sys.entity.BasDoctorEntity;
+import com.one.modules.sys.entity.BasPatientEntity;
+import com.one.modules.sys.entity.SysDeptEntity;
 import com.one.modules.sys.entity.SysUserEntity;
 import com.one.modules.sys.service.BasDoctorService;
+import com.one.modules.sys.service.BasPatientService;
+import com.one.modules.sys.service.SysDeptService;
 import com.one.modules.sys.service.SysUserRoleService;
 import com.one.modules.sys.service.SysUserService;
 import com.one.modules.sys.shiro.ShiroUtils;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +46,10 @@ public class SysUserController extends AbstractController {
 	private SysUserRoleService sysUserRoleService;
 	@Autowired
 	private BasDoctorService basDoctorService;
+	@Autowired
+	private BasPatientService basPatientService;
+	@Autowired
+	private SysDeptService sysDeptService;
 	
 	/**
 	 * 所有用户列表
@@ -63,7 +72,30 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping("/info")
 	public R info(){
-		return R.ok().put("user", getUser());
+		
+		R r = new R();
+		Map<String, Object> baseMap = new HashMap<String, Object>();
+		Map<String, Object> userMap = new HashMap<String, Object>();
+		//操作表是否为空
+		boolean isBlank = getUser().getOperateTable() != null && !getUser().getOperateTable().equals("");
+		//是患者
+		if(isBlank && getUser().getOperateTable().equals("bas_patient")){
+			BasPatientEntity pat = basPatientService.queryObject(getUser().getInfoId());
+			SysDeptEntity dept = sysDeptService.queryObject(pat.getDeptId());
+			baseMap.put("deptName", dept.getName());
+			baseMap.put("name", pat.getPatName());
+			baseMap.put("contactWay", pat.getContactWay());
+		}
+		//是医生
+		//
+		//
+		//
+		userMap.put("nickName", getUser().getNickName());
+		userMap.put("headImgUrl", getUser().getHeadImgUrl());
+		
+		r.put("baseInfo", baseMap);
+		r.put("user", userMap);
+		return r;
 	}
 	
 	/**

@@ -34,13 +34,13 @@
 	<body>
 <div id="my_membe_list" class="content-wrapper" style="margin-left: 0px;">
 <section class="content">
-	<div class="box box-warning">
+	<div class="box box-info">
       <div class="box-header with-border">
         <div class="pull-left">
-       	 <button type="button" class="btn btn-box-tool" onclick="goList();"><i class="fa fa-chevron-left"></i></button>
+       	 <button type="button" class="btn btn-box-tool" onclick="goList();"><i class="fa fa-chevron-left  fa-lg"></i></button>
         </div>
        	<div class="pull-right">
-       	 <button type="button" class="btn btn-box-tool" onclick="info()">添加成员</button>
+       		<button type="button" class="btn btn-box-tool"  onclick="info()"><i class="fa fa-user-plus fa-lg"></i></button>
         </div>
       </div>	  
 	  <div class="box-body no-padding">
@@ -95,7 +95,7 @@ var vm = new Vue({
         				htmls += "<li>";
         				htmls += "	<a href=\"javascript:void(0);\" onclick=\"info("+data[i].memberId+")\">";
         				htmls += 		data[i].memberName;
-        				htmls += "		<span class=\"pull-right badge bg-blue\">11111111</span>";
+        				htmls += "		<span class=\"pull-right badge bg-blue\"></span>";
         				htmls += "	</a>";
         				htmls += "</li>";
         			}

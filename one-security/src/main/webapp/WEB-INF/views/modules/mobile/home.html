@@ -44,7 +44,7 @@
            <div class="box box-widget widget-user">
             <div class="widget-user-header bg-aqua-active">
               <h3 class="widget-user-username">{{user.nickName}}</h3>
-              <h5 class="widget-user-desc">抚顺社区</h5>
+              <h5 class="widget-user-desc">{{baseInfo.deptName}}</h5>
             </div>
             <div class="widget-user-image">
               <img class="img-circle" :src="user.headImgUrl" @click="goUrl">
@@ -53,13 +53,13 @@
             </div>
             <div class="box box-widget">
             <div class="box-body">
-              <a class="btn btn-app" style="background-color: #39CCCC;">
+              <a class="btn btn-app bg-teal-gradient">
                 <i class="fa fa-users" @click="toMyMemberList"></i> 家庭成员
               </a>
-              <a class="btn btn-app" style="background-color: #f39c12;">
+              <a class="btn btn-app bg-yellow-gradient">
                 <i class="fa fa-book" @click="toMyInfo"></i> 个人信息
               </a>
-              <a class="btn btn-app" style="background-color: #f56954;">
+              <a class="btn btn-app bg-red-gradient">
                 <i class="fa fa-user-md"></i> 普查结果
               </a>
              </div>
@@ -126,12 +126,14 @@
 		var vm = new Vue({
 			el:'#rrapp',
 			data:{
-				user:{}
+				user:{},
+				baseInfo:{}				
 			},
 			methods: {
 				getUser: function(){
 					$.getJSON("${request.contextPath}/sys/user/info?_"+$.now(), function(r){
 						vm.user = r.user;
+						vm.baseInfo = r.baseInfo;
 					});
 				},
 				goUrl:function(){
