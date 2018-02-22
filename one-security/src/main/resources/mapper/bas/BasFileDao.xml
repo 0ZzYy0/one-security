@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.one.modules.sys.dao.BasFileDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.one.modules.sys.entity.BasFileEntity" id="basFileMap">
+        <result property="fileId" column="file_id"/>
+        <result property="posId" column="pos_id"/>
+        <result property="fileType" column="file_type"/>
+        <result property="fileAddr" column="file_addr"/>
+        <result property="fileSuffix" column="file_suffix"/>
+        <result property="fileInfo" column="file_info"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.one.modules.sys.entity.BasFileEntity">
+		select * from bas_file where file_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.one.modules.sys.entity.BasFileEntity">
+		select * from bas_file
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by file_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bas_file 
+	</select>
+	 
+	<insert id="save" parameterType="com.one.modules.sys.entity.BasFileEntity">
+		insert into bas_file
+		(
+			`file_id`, 
+			`pos_id`, 
+			`file_type`, 
+			`file_addr`, 
+			`file_suffix`, 
+			`file_info`, 
+			`remark`
+		)
+		values
+		(
+			#{fileId}, 
+			#{posId}, 
+			#{fileType}, 
+			#{fileAddr}, 
+			#{fileSuffix}, 
+			#{fileInfo}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.one.modules.sys.entity.BasFileEntity">
+		update bas_file 
+		<set>
+			<if test="posId != null">`pos_id` = #{posId}, </if>
+			<if test="fileType != null">`file_type` = #{fileType}, </if>
+			<if test="fileAddr != null">`file_addr` = #{fileAddr}, </if>
+			<if test="fileSuffix != null">`file_suffix` = #{fileSuffix}, </if>
+			<if test="fileInfo != null">`file_info` = #{fileInfo}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where file_id = #{fileId}
+	</update>
+	
+	<delete id="delete">
+		delete from bas_file where file_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bas_file where file_id in 
+		<foreach item="fileId" collection="array" open="(" separator="," close=")">
+			#{fileId}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -19,6 +19,8 @@ public interface BasPatientService {
 	
 	List<BasPatientEntity> queryList(Map<String, Object> map);
 	
+	List<Map<String, Object>> queryListByDeptId(String deptId);
+	
 	int queryTotal(Map<String, Object> map);
 	
 	void save(BasPatientEntity basPatient);

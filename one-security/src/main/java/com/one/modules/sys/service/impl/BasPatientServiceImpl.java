@@ -51,5 +51,10 @@ public class BasPatientServiceImpl implements BasPatientService {
 	public void deleteBatch(Long[] patIds){
 		basPatientDao.deleteBatch(patIds);
 	}
+
+	@Override
+	public List<Map<String, Object>> queryListByDeptId(String deptId) {
+		return basPatientDao.queryListByDeptId(deptId);
+	}
 	
 }

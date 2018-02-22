@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.one.modules.sys.dao.BasToothPositionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.one.modules.sys.entity.BasToothPositionEntity" id="basToothPositionMap">
+        <result property="posId" column="pos_id"/>
+        <result property="infoId" column="info_id"/>
+        <result property="operateTable" column="operate_table"/>
+        <result property="posCode" column="pos_code"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.one.modules.sys.entity.BasToothPositionEntity">
+		select * from bas_tooth_position where pos_id = #{value}
+	</select>
+	
+	<select id="getPatient" resultType="map"  parameterType="map">
+		<if test="tableName == 'bas_pat_member'">
+			SELECT
+				bpm.member_name AS name,
+				bpm.member_age AS age,
+				bpm.member_gender AS gender,
+				bpm.member_type AS type,
+				sd. NAME AS deptName,
+				bpm.contact_way AS contactWay,
+				(
+					SELECT
+						p. NAME
+					FROM
+						sys_dept p
+					WHERE
+						p.dept_id = sd.parent_id
+				) AS parentName
+			FROM
+				bas_pat_member bpm,
+				sys_dept sd
+			WHERE
+				sd.dept_id = bpm.dept_id
+			and bpm.member_id = #{infoId}
+		</if> 
+		
+		<if test="tableName == 'bas_patient'">
+			SELECT
+				bp.pat_name AS name,
+				bp.pat_age AS age,
+				bp.pat_gender AS gender,
+				bp.pat_type AS type,
+				sd.name AS deptName,
+				bp.contact_way AS contactWay,
+				(
+					SELECT
+						p. NAME
+					FROM
+						sys_dept p
+					WHERE
+						p.dept_id = sd.parent_id
+				) AS parentName
+			FROM
+				bas_patient bp,
+				sys_dept sd
+			WHERE
+				sd.dept_id = bp.dept_id	
+			and bp.pat_id = #{infoId}
+		</if> 
+	</select>
+
+	<select id="queryList" resultType="com.one.modules.sys.entity.BasToothPositionEntity">
+		select * from bas_tooth_position
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by pos_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bas_tooth_position 
+	</select>
+	 
+	<insert id="save" parameterType="com.one.modules.sys.entity.BasToothPositionEntity">
+		insert into bas_tooth_position
+		(
+			`pos_id`, 
+			`info_id`, 
+			`operate_table`, 
+			`pos_code`, 
+			`remark`
+		)
+		values
+		(
+			#{posId}, 
+			#{infoId}, 
+			#{operateTable}, 
+			#{posCode}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.one.modules.sys.entity.BasToothPositionEntity">
+		update bas_tooth_position 
+		<set>
+			<if test="infoId != null">`info_id` = #{infoId}, </if>
+			<if test="operateTable != null">`operate_table` = #{operateTable}, </if>
+			<if test="posCode != null">`pos_code` = #{posCode}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where pos_id = #{posId}
+	</update>
+	
+	<delete id="delete">
+		delete from bas_tooth_position where pos_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bas_tooth_position where pos_id in 
+		<foreach item="posId" collection="array" open="(" separator="," close=")">
+			#{posId}
+		</foreach>
+	</delete>
+
+</mapper>

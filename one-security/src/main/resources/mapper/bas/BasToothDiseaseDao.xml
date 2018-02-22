@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.one.modules.sys.dao.BasToothDiseaseDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.one.modules.sys.entity.BasToothDiseaseEntity" id="basToothDiseaseMap">
+        <result property="diseaseId" column="disease_id"/>
+        <result property="posId" column="pos_id"/>
+        <result property="diseaseCode" column="disease_code"/>
+        <result property="diseaseName" column="disease_name"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.one.modules.sys.entity.BasToothDiseaseEntity">
+		select * from bas_tooth_disease where disease_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.one.modules.sys.entity.BasToothDiseaseEntity">
+		select * from bas_tooth_disease
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by disease_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bas_tooth_disease 
+	</select>
+	 
+	<insert id="save" parameterType="com.one.modules.sys.entity.BasToothDiseaseEntity">
+		insert into bas_tooth_disease
+		(
+			`disease_id`, 
+			`pos_id`, 
+			`disease_code`, 
+			`disease_name`, 
+			`remark`
+		)
+		values
+		(
+			#{diseaseId}, 
+			#{posId}, 
+			#{diseaseCode}, 
+			#{diseaseName}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.one.modules.sys.entity.BasToothDiseaseEntity">
+		update bas_tooth_disease 
+		<set>
+			<if test="posId != null">`pos_id` = #{posId}, </if>
+			<if test="diseaseCode != null">`disease_code` = #{diseaseCode}, </if>
+			<if test="diseaseName != null">`disease_name` = #{diseaseName}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where disease_id = #{diseaseId}
+	</update>
+	
+	<delete id="delete">
+		delete from bas_tooth_disease where disease_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bas_tooth_disease where disease_id in 
+		<foreach item="diseaseId" collection="array" open="(" separator="," close=")">
+			#{diseaseId}
+		</foreach>
+	</delete>
+
+</mapper>

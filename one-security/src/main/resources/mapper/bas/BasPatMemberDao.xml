@@ -99,7 +99,62 @@
 			#{memberId}
 		</foreach>
 	</delete>
+	
 	<select id="queryMyMemberList" resultType="com.one.modules.sys.entity.BasPatMemberEntity" parameterType="map">
 		select * from bas_pat_member where pat_Id = #{patId}
+	</select>
+	
+	<select id="queryCensusResultsList"  resultType="map" parameterType="map">
+		SELECT
+			bp.pat_id as infoId,
+			'bas_patient' as tableName,
+			bp.pat_name AS name,
+			bp.pat_age AS age,
+			bp.pat_gender AS gender,
+			bp.pat_type AS type,
+			sd. NAME AS deptName,
+			bp.contact_way AS contactWay,
+			(
+				SELECT
+					p. NAME
+				FROM
+					sys_dept p
+				WHERE
+					p.dept_id = sd.parent_id
+			) AS parentName
+		FROM
+			bas_patient bp,
+			sys_dept sd
+		WHERE
+			sd.dept_id = bp.dept_id
+		AND bp.pat_id = #{patId}
+		UNION ALL
+			SELECT
+				bpm.member_id as infoId,
+				'bas_pat_member' as tableName,
+				bpm.member_name AS name,
+				bpm.member_age AS age,
+				bpm.member_gender AS gender,
+				bpm.member_type AS type,
+				sd. NAME AS deptName,
+				bpm.contact_way AS contactWay,
+				(
+					SELECT
+						p. NAME
+					FROM
+						sys_dept p
+					WHERE
+						p.dept_id = sd.parent_id
+				) AS parentName
+			FROM
+				bas_pat_member bpm,
+				sys_dept sd
+			WHERE
+				sd.dept_id = bpm.dept_id
+			AND bpm.pat_id = #{patId}
+	</select>
+	
+	<select id="queryListByDeptId" resultType="map">
+		select member_id as infoId,pat_id as patId,dept_id as deptId,member_name as name,member_type as type,'bas_pat_member' as tableName  from bas_pat_member where dept_id = #{deptId}
 	</select>
 </mapper>

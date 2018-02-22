@@ -20,6 +20,10 @@
 	<select id="queryObject" resultType="com.one.modules.sys.entity.BasPatientEntity">
 		select * from bas_patient where pat_id = #{value}
 	</select>
+	
+	<select id="queryListByDeptId" resultType="map">
+		select pat_id as infoId,pat_id as patId,dept_id as deptId,pat_type as type,pat_name as name,'bas_patient' as tableName from bas_patient where dept_id = #{deptId}
+	</select>
 
 	<select id="queryList" resultType="com.one.modules.sys.entity.BasPatientEntity">
 		select * from bas_patient

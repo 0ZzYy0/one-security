@@ -1,12 +1,6 @@
 package com.one.modules.sys.entity;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-
-import com.weixin.pojo.SNSUserInfo;
-
-
 
 /**
  * 患者信息表

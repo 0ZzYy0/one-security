@@ -29,7 +29,11 @@ var vm = new Vue({
             success: function(data){
         		var deptRows = '[';
         		for(var i = 0 ; i < data.length ; i++){
-        			deptRows += '{name:\''+data[i].name+'\',id:\''+data[i].deptId+'\'},';
+        			if(data[i].parentName != null && data[i].parentName != ""){
+        				deptRows += '{name:\''+data[i].parentName +':' + data[i].name +'\',id:\''+data[i].deptId+'\'},';
+        			}else{
+        				deptRows += '{name:\'' + data[i].name +'\',id:\''+data[i].deptId+'\'},';
+        			}
         		}
         		deptRows = deptRows.substring(0, deptRows.length - 1);
         		deptRows += ']';
@@ -96,7 +100,11 @@ var vm = new Vue({
 		        		var deptRows = '[';
 		        		for(var i = 0 ; i < data.length ; i++){
 		            		if((vm.basPatMember.memberType == "学生" && data[i].deptType == "学校") || (vm.basPatMember.memberType == "成人" && data[i].deptType == "社区")){
-		            			deptRows += '{name:\''+data[i].name+'\',id:\''+data[i].deptId+'\'},';
+		            			if(data[i].parentName != null && data[i].parentName != ""){
+		            				deptRows += '{name:\''+data[i].parentName +':' + data[i].name +'\',id:\''+data[i].deptId+'\'},';
+		            			}else{
+		            				deptRows += '{name:\'' + data[i].name +'\',id:\''+data[i].deptId+'\'},';
+		            			}
 		            		}
 		        		}
 	        			deptRows = deptRows.substring(0, deptRows.length - 1);

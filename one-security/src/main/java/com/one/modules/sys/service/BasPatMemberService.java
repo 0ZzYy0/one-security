@@ -21,6 +21,10 @@ public interface BasPatMemberService {
 	
 	List<BasPatMemberEntity> queryMyMemberList(Map<String, Object> map);
 	
+	List<Map<String,Object>> queryListByDeptId(String deptId);
+	
+	List<Map<String,Object>> queryCensusResultsList(Map<String, Object> map);
+	
 	int queryTotal(Map<String, Object> map);
 	
 	void save(BasPatMemberEntity basPatMember);

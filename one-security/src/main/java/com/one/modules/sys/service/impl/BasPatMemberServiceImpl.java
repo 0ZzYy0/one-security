@@ -55,5 +55,14 @@ public class BasPatMemberServiceImpl implements BasPatMemberService {
 	public void deleteBatch(Long[] memberIds){
 		basPatMemberDao.deleteBatch(memberIds);
 	}
+
+	@Override
+	public List<Map<String, Object>> queryListByDeptId(String deptId) {
+		return basPatMemberDao.queryListByDeptId(deptId);
+	}
 	
+	@Override
+	public List<Map<String, Object>> queryCensusResultsList(Map<String ,Object> map) {
+		return basPatMemberDao.queryCensusResultsList(map);
+	}
 }

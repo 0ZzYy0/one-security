@@ -17,4 +17,8 @@ import com.one.modules.sys.entity.BasPatMemberEntity;
 @Mapper
 public interface BasPatMemberDao extends BaseDao<BasPatMemberEntity> {
 	List<BasPatMemberEntity> queryMyMemberList(Map<String,Object> map);
+	
+	List<Map<String,Object>> queryListByDeptId(String deptId);
+	
+	List<Map<String,Object>> queryCensusResultsList(Map<String ,Object> map);
 }

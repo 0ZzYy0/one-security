@@ -10,19 +10,7 @@
 	<select id="queryList" resultType="com.one.modules.sys.entity.SysDeptEntity">
 		select d.*,(select p.name from sys_dept p where p.dept_id = d.parent_id) as parentName
 		from sys_dept d where d.del_flag = 0
-		<!--  数据过滤  -->
-		${filterSql}
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by d.${sidx} ${order}
-            </when>
-			<otherwise>
-                order by d.order_num asc
-			</otherwise>
-        </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
+		order by d.dept_id asc
 	</select>
 	 
 	<insert id="save" parameterType="com.one.modules.sys.entity.SysDeptEntity" useGeneratedKeys="true" keyProperty="deptId">

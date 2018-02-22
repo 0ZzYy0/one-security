@@ -60,7 +60,7 @@
                 <i class="fa fa-book" @click="toMyInfo"></i> 个人信息
               </a>
               <a class="btn btn-app bg-red-gradient">
-                <i class="fa fa-user-md"></i> 普查结果
+                <i class="fa fa-user-md" @click="toCensusResults"></i> 普查结果
               </a>
              </div>
 		     <div class="box-footer">
@@ -144,6 +144,9 @@
 		        },
 		        toMyMemberList: function(){
 		        	window.location.href = "${request.contextPath}/baspatmember/toMyMemberList";
+		        },
+		        toCensusResults: function(){
+		        	window.location.href = "${request.contextPath}/baspatmember/toCensusResults";
 		        }
 			},
 			created: function(){

@@ -76,7 +76,6 @@ public class BasPatMemberController {
 	@RequestMapping("/save")
 	@ResponseBody
 	public R save(@RequestBody BasPatMemberEntity basPatMember) {
-		System.out.println("确实是在新增!!!!");
 		Calendar calendar = Calendar.getInstance();
 		basPatMember.setMemberId(Long.parseLong(calendar.getTime().getTime() + ""));
 		SysUserEntity user = sysUserService.queryObject(ShiroUtils.getUserId());
@@ -142,7 +141,6 @@ public class BasPatMemberController {
 	@ResponseBody
 	public R getinfo(@PathVariable("memberId") Long memberId) {
 		BasPatMemberEntity basPatMember = basPatMemberService.queryObject(memberId);
-		System.out.println(basPatMember);
 		return R.ok().put("basPatMember", basPatMember);
 	}
 	
@@ -156,5 +154,30 @@ public class BasPatMemberController {
 		Map<String,Object> pareMap = new HashMap<>();
 		List<SysDeptEntity> deptList = sysDeptService.queryAllList(new HashMap<String, Object>());
 		return deptList;
+	}
+	
+	/**
+	 * 跳转到wx端机构列表页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "toCensusResults")
+	public String toCensusResults() {
+		ShiroUtils.getSession().setAttribute("uploadPermissions", "show");
+		//跳转到wx端机构列表页面
+		return "redirect:/modules/mobile/census_results.html";
+	}
+	
+	/**
+	 * 患者查看普查结果,自己加家人列表
+	 */
+	@RequestMapping(value = "getCensusResultsList")
+	@ResponseBody
+	public List<Map<String ,Object>> getCensusResultsList() {
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		SysUserEntity user = sysUserService.queryObject(ShiroUtils.getUserId());
+		paraMap.put("patId", user.getInfoId());
+		List<Map<String ,Object>> dataList = basPatMemberService.queryCensusResultsList(paraMap);
+		return dataList;
 	}
 }
