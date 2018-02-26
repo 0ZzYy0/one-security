@@ -50,14 +50,14 @@
             </div>
             <div class="box box-widget">
             <div class="box-body">
-              <a class="btn btn-app bg-teal-active">
-                <i class="fa fa-users" @click="toDeptList('update')"></i> 开始普查
+              <a class="btn btn-app bg-teal-active" href="${request.contextPath}/baspatient/toDeptList/update">
+                <i class="fa fa-users" ></i> 开始普查
               </a>
-              <a class="btn btn-app bg-orange-active">
-                <i class="fa fa-book" @click="toBasDoctorInfo"></i> 个人信息
+              <a class="btn btn-app bg-orange-active" href="${request.contextPath}/basdoctor/toBasDoctorInfo">
+                <i class="fa fa-book" ></i> 个人信息
               </a>
-              <a class="btn btn-app bg-olive-active">
-                <i class="fa fa-user-md" @click="toDeptList('show')"></i> 普查结果
+              <a class="btn btn-app bg-olive-active" href="${request.contextPath}/baspatient/toDeptList/show">
+                <i class="fa fa-user-md" ></i> 普查结果
               </a>
              </div>
 		     <div class="box-footer">

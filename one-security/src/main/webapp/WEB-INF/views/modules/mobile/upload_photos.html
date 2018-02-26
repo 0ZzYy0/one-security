@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>普查</title>
-<#include "/header.html">
+<title>普查</title> <#include "/header.html">
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -19,6 +18,7 @@
 <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
 <link rel="stylesheet" href="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.css">
 
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.min.js"></script>
 <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
 <script src="${request.contextPath}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
@@ -30,56 +30,102 @@
 <script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
 <script src="${request.contextPath}/statics/libs/app.js"></script>
 <script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
 
 </head>
 <body>
 
-<div class="content-wrapper" style="margin-left: 0px;">
-	<section class="content">
-		<div id="uploadPhotos" class="box box-info">
-			<div class="box-header with-border">
-			</div>
-			<div class="box-body">
-				<form>
-					<div class="form-group">
-						<label>患者姓名</label>:{{ entity.name }}
-					</div>
-					<div class="form-group">
-						<label>年龄</label>:{{ entity.age }}
-					</div>
-					<div class="form-group">
-						<label>性别</label>:{{ entity.gender }}
-					</div>
-					<div class="form-group">
-						<label>患者类型</label>:{{ entity.type }}
-					</div>
-					<div class="form-group">
-						<label>所属机构</label>:{{ entity.deptName }}
-					</div>
-					<div class="form-group">
-						<label>联系方式</label>:{{ entity.contactWay }}
-					</div>
-				</form>
-			</div>
-			<input type="hidden" id="infoId" value="${Session.infoId}">
-			<input type="hidden" id="tableName" value="${Session.tableName}">
-			<input type="text" id="uploadPermissions" value="${Session.uploadPermissions}">
-			<div class="form-group">
-	         <label>口内照片（<font class="text-red">长按图片删除</font>）</label>
-	         	<div id="upload-img-div">
-	         	    <div class="row" id="showImg">
-	         	    	<div class="col-md-4 col-xs-4">
-	         	    		<img id="uploadWxControls" class="img-responsive pad" onclick="chooseImage()" src="../../images/plus.png" style="display: none;"/>
-							<a id="uploadPcControls" class="a-upload" href="javascript:;" style="display: none;"><input type="file" id="filePath" name="filePath" multiple="multiple" onchange="preview(this)">上传照片</a>
-	         	    	</div>
-              		</div>
+	<div class="content-wrapper" style="margin-left: 0px;">
+		<section class="content">
+			<div id="uploadPhotos" class="box box-info">
+				<div class="box-header with-border"></div>
+				<div class="box-body">
+					<form>
+						<div class="form-group">
+							<label>患者姓名</label>:{{ entity.name }}
+						</div>
+						<div class="form-group">
+							<label>年龄</label>:{{ entity.age }}
+						</div>
+						<div class="form-group">
+							<label>性别</label>:{{ entity.gender }}
+						</div>
+						<div class="form-group">
+							<label>患者类型</label>:{{ entity.type }}
+						</div>
+						<div class="form-group">
+							<label>所属机构</label>:{{ entity.deptName }}
+						</div>
+						<div class="form-group">
+							<label>联系方式</label>:{{ entity.contactWay }}
+						</div>
+					</form>
 				</div>
-	       </div>
-		</div>
-	</section>
-</div>
+				<input type="hidden" id="infoId" value="${Session.infoId}"> <input type="hidden" id="tableName" value="${Session.tableName}"> <input type="text" id="uploadPermissions" value="${Session.uploadPermissions}">
+				<div class="form-group">
+					<div id="upload-img-div">
+						<div id="group1">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(1)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group2">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(2)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group3">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(3)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group4">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(4)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group5">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(5)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group6">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(6)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group7">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(7)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+						<div id="group8">
+							<div class="row" name="showImg">
+								<div class="col-md-4 col-xs-4">
+									<img name="uploadWxControls" class="img-responsive pad" onclick="chooseImage(8)" src="../../statics/images/plus.png" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
 
-<script src="${request.contextPath}/statics/js/modules/mobile/upload_photos.js"></script>
+	<script src="${request.contextPath}/statics/js/modules/mobile/upload_photos.js"></script>
 </body>
 </html>

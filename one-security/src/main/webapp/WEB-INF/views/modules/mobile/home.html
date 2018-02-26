@@ -53,14 +53,14 @@
             </div>
             <div class="box box-widget">
             <div class="box-body">
-              <a class="btn btn-app bg-teal-gradient">
-                <i class="fa fa-users" @click="toMyMemberList"></i> 家庭成员
+              <a class="btn btn-app bg-teal-gradient" href="${request.contextPath}/baspatmember/toMyMemberList">
+                <i class="fa fa-users" ></i> 家庭成员
               </a>
-              <a class="btn btn-app bg-yellow-gradient">
-                <i class="fa fa-book" @click="toMyInfo"></i> 个人信息
+              <a class="btn btn-app bg-yellow-gradient" href="${request.contextPath}/baspatient/toMyInfo">
+                <i class="fa fa-book" ></i> 个人信息
               </a>
-              <a class="btn btn-app bg-red-gradient">
-                <i class="fa fa-user-md" @click="toCensusResults"></i> 普查结果
+              <a class="btn btn-app bg-red-gradient" href="${request.contextPath}/baspatmember/toCensusResults">
+                <i class="fa fa-user-md" ></i> 普查结果
               </a>
              </div>
 		     <div class="box-footer">

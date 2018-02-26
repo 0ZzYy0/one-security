@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新建比色</title>
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<script src="../core/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../core/plugins/jQuery/jquery.form.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script src="../core/adminLTE/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../core/adminLTE/bootstrap/css/bootstrap.min.css">
+
+<script src="../core/plugins/typeahead/bootstrap3-typeahead.min.js"></script>
+
+<script src="../core/adminLTE/dist/js/app.min.js"></script>
+
+<link rel="stylesheet" href="../core/adminLTE/dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../core/adminLTE/dist/css/AdminLTE.min.css">
+
+<link rel="stylesheet" href="../core/plugins/iCheck/all.css">
+<script src="../core/plugins/iCheck/icheck.min.js"></script>
+
+<link rel="stylesheet" href="../core/plugins/fakeloader/fakeloader.css">
+<script src="../core/plugins/fakeloader/fakeloader.min.js"></script>
+
+<!-- font Awesome-->
+<link href="../core/mui/dist/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<!--<script src="../core/mui/dist/js/mui.min.js"></script>
+<link rel="stylesheet" href="../core/mui/dist/css/mui.min.css">
+<link rel="stylesheet" type="text/css" href="../core/mui/dist/css/icons-extra.css" />-->
+
+<script src="../core/js/main.js"></script>
+<script src="../core/js/utils.js"></script>
+<script src="../core/js/uuid.js"></script>
+<style>
+/*a  upload */
+.a-upload {
+    padding: 4px 10px;
+    height: 80px;
+    line-height: 70px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #444;
+    background: #eee;
+    border-color: #ccc;
+    text-decoration: none
+}
+</style>
+
+</head>
+<body>
+<div class="content-wrapper" style="margin-left: 0px;">
+<section class="content">
+	<div class="box box-warning">
+      <div class="box-header with-border">
+        <!-- <h3 class="box-title">Direct Chat</h3> -->
+
+        <div class="pull-left">
+       	 <button type="button" class="btn btn-box-tool" onclick="goList();"><i class="fa fa-chevron-left"></i></button>
+        </div>
+      </div>	  
+	  <div class="box-body">
+	   <form role="form" id="infoFrm">
+	   	   <input type="hidden" name="patInfo.patType" id="patType" value="01" />
+	       <div class="form-group">
+	         <label>患者姓名</label>
+	         <input type="text" id="patName" name="patInfo.patName" class="form-control" autocomplete="off" data-provide="typeahead" placeholder="患者姓名 ...">
+	       </div>
+	       <div class="form-group">
+	         <label>患者年龄</label>
+	         <input type="number" id="patAge" name="patInfo.patAge" class="form-control" placeholder="患者年龄 ...">
+	       </div>
+	       <div class="form-group">
+	         	<label>患者性别</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+                <label>
+                  <input type="radio" name="patInfo.patGender" value="01" checked="checked">男
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label>
+                  <input type="radio" name="patInfo.patGender"  value="02">女
+                </label>
+	       </div>
+	       <div class="form-group">
+	         	<label>选择色板</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+                <label>
+                  <input type="radio" name="patInfo.colorPlane" value="01" checked="checked">3D
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label>
+                  <input type="radio" name="patInfo.colorPlane"  value="02">线性
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label>
+                  <input type="radio" name="patInfo.colorPlane"  value="03">牙本质
+                </label>
+	       </div>
+           <div class="form-group">
+             <label>备注</label>
+             <textarea class="form-control" id="remark" name="patInfo.remark" rows="3" placeholder="备注信息 ..."></textarea>
+           </div>
+       	</form>
+           <form id="imgFrm">    
+	       <div class="form-group">
+	         <label>口内照片（<font class="text-red">长按图片删除</font>）</label>
+	         	<div id="upload-img-div">
+	         	    <div class="row" id="showImg">
+	         	    	<div class="col-md-4 col-xs-4">
+	         	    		<!-- <i class="fa fa-5x fa-plus-square-o" style="color:#BFBFBF;" onclick="chooseImage()"></i> -->
+	         	    		<img id="uploadWxControls" class="img-responsive pad" onclick="chooseImage()" src="../images/plus.png" style="display: none;"/>
+	         	    		
+							<a id="uploadPcControls" class="a-upload" href="javascript:;" style="display: none;"><input type="file" id="filePath" name="filePath" multiple="multiple" onchange="preview(this)">上传照片</a>
+	         	    	</div>
+              		</div>
+	         	    	<!-- <i class="fa fa-5x fa-plus-square-o" style="color:#BFBFBF;" onclick="chooseImage()"></i> -->
+					<!-- <ul class="mui-table-view mui-grid-view" style="background-color: white;">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4"><i class="fa fa-5x fa-plus-square-o" style="color:#BFBFBF;" onclick="chooseImage()"></i></li>
+					</ul> -->
+				</div>
+	       </div>
+	       </form>
+	  </div>
+	<div class="box-footer">
+		<button id="clearCont" type="button" class="btn btn-default" onclick="reloadCont();">取消获取</button>
+		<button id="saveInfo" type="button" class="btn btn-info pull-right" onclick="doSubmit(this);">开始比色</button>
+	</div>
+	</div>
+</section>
+</div>
+</body>
+<script language="javascript">
+var patId;
+var selectPatId;
+var upId;
+var schemeId;
+var oldSchemeId;
+var name2Id = {};//姓名对应的id
+var bsType = "add";
+var splitDate;
+//自动提示json
+var localObjectData;
+//定时器
+var timeOutEvent = 0;
+//上传图片
+var images = {
+	localId : [],
+	serverId : []
+};
+//电脑图片上传
+var imgFormData = new FormData();
+
+$(function(){
+	$('input[type="radio"]').iCheck({
+	    radioClass: 'iradio_flat-green'
+	  });
+	if(is_weixn()){
+		$("#uploadWxControls").show();
+	}else{
+		$("#uploadPcControls").show();
+	}
+	$("#clearCont").hide();
+	getPatNameData();
+	getConfig();
+	parseLocalArrayData();
+});
+
+function reloadCont() {
+	window.location.reload();
+}	
+
+//获取当前用户创建的患者姓名
+function getPatNameData(){
+	$.ajax({
+		url : path + "/compcolor/getPatNameData.do?condition=01",
+		type : 'post',
+		dataType : "json",
+		async : true,
+		success : function(data) {
+			//var json = eval('(' + data + ')');
+			localObjectData = data.data;
+		}
+	});
+}
+
+//自动匹配
+function parseLocalArrayData() {
+      $("#patName").typeahead({
+          /*source: function (query, process) {
+              //query是输入的值
+              $.post(path + "/compcolor/getPatNameData.do", { condition: query }, function (e) {
+            	  var json = eval('(' + e + ')');
+                  if (json.success) {
+                      //if (json.data.length == 0) { alert("没有查到对应的人"); return; }
+                      var array = [];
+                      $.each(json.data, function (index, ele) {
+                          name2Id[ele.name] = ele.id;//键值对保存下来。
+                          array.push(ele.name);
+                      });
+                      process(array);
+                  }
+              });
+          },*/
+          source: function (query, process) {
+              var array = [];
+              $.each(localObjectData, function (index, ele) {
+                  name2Id[ele.name] = ele.id;//键值对保存下来。
+                  array.push(ele.name);
+              });
+              process(array);//调用处理函数，格式化
+          },          
+          items: 5,//最多显示个数
+          updater: function (item) {
+              //return item;//这里一定要return，否则选中不显示，外加调用display的时候null reference错误。
+        	  var str = item.split("——");
+        	  splitDate = str[1];
+              return str[0];//返回字符串
+          },
+          displayText: function (item) {
+              return item;//返回字符串
+          },
+          afterSelect: function (item) {
+           	//alert(name2Id[item+"——"+splitDate]);//打印对应的id
+             //选择项之后的事件 ，item是当前选中的。
+            if(confirm("是否获取上次比色信息？"))
+			{
+            	//mask = mui.createModalMask();
+            	//mask.show();
+				
+				$("#clearCont").show();
+              	bsType = "update";
+               	selectPatId = name2Id[item+"——"+splitDate];
+               	
+            	$(".fakeloader").fadeIn();
+            	$(".fakeloader").fakeLoader({
+                       timeToHide:12000,
+                       bgColor:"#000000",
+                       spinner:"spinner2",
+                       zIndex:"1051"
+                 });
+            	
+            	//setTimeout('getPatInfo()', 500);
+               	getPatInfo();
+			}else{
+              	 bsType = "add";
+			}
+          },
+          delay: 0//延迟时间
+      });
+}
+
+function getPatInfo(){
+	$.ajax({
+		url : path + "/compcolor/getPatientSechemeInfo.do",
+		type : 'post',
+		dataType : "json",
+		async : true,
+		data : {
+			selectPatId : selectPatId
+		},
+		success : function(data) {
+			var str = data[0];
+			oldSchemeId = str.schemeId;
+			var pname = str.patName;
+			var pAge = str.patAge;
+			var pGender = str.patGender;
+			var pColorPlane = str.colorPlane;
+			var remark = str.remark;
+			var fileAddr = str.fileAddr;
+
+			$("#patAge").val(pAge);
+			$("#remark").text(remark);
+			$("input[name='patInfo.patGender'][value='"+pGender+"']").iCheck('check');
+			$("input[name='patInfo.colorPlane'][value='"+pColorPlane+"']").iCheck('check');
+			if(is_weixn()){
+				$("#upload-img-div").find(".row").html('<div class="col-md-4 col-xs-4"><img id="uploadWxControls" class="img-responsive pad" onclick="chooseImage()" src="../images/plus.png" /></div>');
+			}else{
+				$("#upload-img-div").find(".row").html('<div class="col-md-4 col-xs-4"><a id="uploadPcControls" class="a-upload" href="javascript:;"><input type="file" id="filePath" name="filePath" multiple="multiple" onchange="preview(this)">上传口内照</a></div>');
+			}
+			
+			//$("#upload-img-div").find(".row").html('<div class="col-md-4 col-xs-4"><i class="fa fa-5x fa-plus-square-o" style="color:#BFBFBF;" onclick="chooseImage()"></i></div>');
+			if(fileAddr.indexOf(",")>0){
+				var html = "";
+				var fileList = fileAddr.split(",");
+				for ( var i = 0; i < fileList.length; i++) {
+					var fid = fileList[i].split("@")[0];
+					var fPath = fileList[i].split("@")[1];
+					html += '<div class="col-md-4 col-xs-4"><img class="img-responsive pad wx_img_history" id="'+fid+'" src="' + path + fPath + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+				}
+				$("#upload-img-div").find(".row").find(".col-md-4").first().before(html);
+			}else{
+				var fid = fileAddr.split("@")[0];
+				var fPath = fileAddr.split("@")[1];
+				var html = '<div class="col-md-4 col-xs-4"><img class="img-responsive pad wx_img_history" id="'+fid+'" src="' + path + fPath + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+				$("#upload-img-div").find(".row").find(".col-md-4").first().before(html);
+			}
+
+        	$(".fakeloader").fadeOut();
+			//mui样式遍历照片
+			/*$("#upload-img-div").find("ul").html('<li class="mui-table-view-cell mui-media mui-col-xs-4"><i class="fa fa-5x fa-plus-square-o" style="color:#BFBFBF;" onclick="chooseImage()"></i></li>');
+			if(fileAddr.indexOf(",")>0){
+				var html = "";
+				var fPath = fileAddr.split(",");
+				for ( var i = 0; i < fPath.length; i++) {
+					html += '<li class="mui-table-view-cell mui-media mui-col-xs-4"><img src="' + path + fPath[i] + 
+						'" style="width:96px;height:96px;" onclick="previewImage(this)" class="wx_img_history"></li>';
+				}
+				$("#upload-img-div").find("li").first().before(html);
+			}else{
+				var html = '<li class="mui-table-view-cell mui-media mui-col-xs-4"><img src="' + path + fileAddr + 
+					'" style="width:96px;height:96px;" onclick="previewImage(this)" class="wx_img_history"></li>';
+				$("#upload-img-div").find("li").first().before(html);
+			}*/
+
+			//$(mask).remove();
+		}
+	});
+}
+
+function getConfig() {
+	var htmlUrl = location.href;
+	$.ajax({
+		url : 'getConfig.do',
+		type : 'post',
+		dataType : "json",
+		async : true,
+		data : {
+			htmlUrl : htmlUrl
+		},
+		success : function(data) {
+			wx.config({
+				debug : false,
+				appId : data[0].appId,
+				timestamp : data[0].timestamp,
+				nonceStr : data[0].nonceStr,
+				signature : data[0].signature,
+				jsApiList : [ 'chooseImage', 'previewImage', 'uploadImage' ]
+			});
+		}
+	});
+}
+
+function chooseImage() {
+	wx.chooseImage({
+		count : 9,
+		sizeType : ['original','compressed'],// 
+		success : function(res) {
+			images.localId = res.localIds;
+			for ( var i = 0; i < res.localIds.length; i++) {
+				var imgId = res.localIds[i];
+				if(imgId.indexOf("://")>0){
+					imgId = imgId.split("://")[1];
+				}
+				var html = '<div class="col-md-4 col-xs-4"><img class="img-responsive pad wx_img" id="' + imgId + '" src="' + res.localIds[i] + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+				$("#upload-img-div").find(".row").find(".col-md-4").first().before(html);
+				//mui样式遍历照片
+				/*var html = '<li class="mui-table-view-cell mui-media mui-col-xs-4"><img src="' + res.localIds[i]
+						+ '" style="width:96px;height:96px;" onclick="previewImage(this)" class="wx_img"></li>';
+				$("#upload-img-div").find("li").first().before(html);*/
+			}
+		}
+	});
+}
+
+//图片预览
+function previewImage(item) {
+	var urls = [];
+	var current = $(item).attr("src");
+	current = current.replace("-thum.jpg", ".jpg");
+	var img_div = $(item).parent().parent().parent();
+	var imgs = img_div.find("img");
+	var len = imgs.length;
+	imgs.each(function(i) {
+		var src = $(this).attr("src");
+		src = src.replace("-thum.jpg", ".jpg");
+		urls.push(src);
+	});
+	wx.previewImage({
+		current : current,
+		urls : urls
+	});
+}
+
+//保存
+function doSubmit(obj) {
+	if($("#patName").val() == ''){
+		//$(".fakeloader").fadeOut();
+		alert("患者姓名不能为空！");
+		return;
+	}
+	var imgs = $("#upload-img-div").find("img");
+	var len = imgs.length;
+	var limitCount;
+	if(is_weixn()){
+		limitCount = 1;
+	}else{
+		limitCount = 0;
+	}
+	if(len <= limitCount){
+		//$(".fakeloader").fadeOut();
+		alert("口内照不能为空！");
+		return;
+	}
+
+	$(obj).attr("disabled","disabled");
+	//mask = mui.createModalMask();
+	//mask.show();
+	$(".fakeloader").fadeIn();
+	$(".fakeloader").fakeLoader({
+           timeToHide:12000,
+           bgColor:"#000000",
+           spinner:"spinner2",
+           zIndex:"1051"
+     });
+	
+	if(is_weixn()){
+		setTimeout('savePat()', 300);
+	}else{
+		setTimeout('savePatForPc()', 300);
+	}
+}
+
+function savePatForPc(){
+	if(bsType == 'add'){
+		var flag = 'add';
+		var from = $("#imgFrm");
+		var patinfo = serializeForm("infoFrm");
+		//患者和方案id
+		patId = Math.uuidCompact();
+		schemeId = Math.uuidCompact();
+		//历史图片id
+		var oldImgId = '';
+		var oldimg_items = from.find(".wx_img_history");
+		oldimg_items.each(function() {
+			oldImgId += "'"+$(this).attr("id") + "',";
+		});
+		if(oldImgId != ''){
+			oldImgId = oldImgId.substring(0, oldImgId.length - 1);
+		}
+		//新增患者和方案信息
+		$.ajax({
+			url : path + "/compcolor/savePatientInfo.do",
+			type : 'post',
+			dataType : "json",
+			async : true,
+			data : patinfo+"&patInfo.patId="+patId+"&schemeId="+schemeId,
+			success : function(data) {
+				//patId = data[0].patId;
+				//schemeId = data[0].schemeId;
+				//upId = data[0].upId;
+			}
+		});
+		
+		//formdata上传
+		var url = path + "/compcolor/addPatientSchemeImgForPc.do";
+		var folder = "/upload/wx/patient/" + patId+"/"+schemeId;
+		
+		imgFormData.append("flag",flag);
+		imgFormData.append("patId",patId);
+		imgFormData.append("schemeId",schemeId);
+		imgFormData.append("folder",folder);
+		imgFormData.append("oldImgId",oldImgId);
+
+		$.ajax({
+			url : url,
+			type : 'post',
+			dataType : "text",
+			/*			async : false,
+ 			data : {
+				flag : flag,
+				patId : patId,
+				schemeId : schemeId,
+				folder : folder,
+				oldImgId : oldImgId
+			}, */
+			data : imgFormData,
+	        processData : false,         // 告诉jQuery不要去处理发送的数据
+	        contentType : false,        // 告诉jQuery不要去设置Content-Type请求头
+			success : function(data) {
+				if (flag == 'add') {
+					if (data == 'ok') {
+						$("#saveInfo").removeAttr("disabled");
+						$(".fakeloader").fadeOut();
+						alert('保存成功！');
+						window.location.href = "../cchome.html?patId="+patId+"&schemeId="+schemeId+"&colorPlane="+$("input[name='patInfo.colorPlane']:checked").val()+"&random="+Math.random();
+					}else if(data == 'empty'){
+						$("#saveInfo").removeAttr("disabled");
+						$(".fakeloader").fadeOut();
+						alert('口内照不能为空！');
+					}	
+				} else {
+					$("#saveInfo").removeAttr("disabled");
+					$(".fakeloader").fadeOut();
+					alert('保存成功！');
+					window.location.href = "../cchome.html?patId="+patId+"&schemeId="+schemeId+"&colorPlane="+$("input[name='patInfo.colorPlane']:checked").val()+"&random="+Math.random();
+				}
+			}
+		});
+		
+	}else{
+		var flag = 'update';
+		var from = $("#imgFrm");
+		var patinfo = serializeForm("infoFrm");
+		//方案id
+		schemeId = Math.uuidCompact();
+		patId = selectPatId;
+		//历史图片id
+		var oldImgId = '';
+		var oldimg_items = from.find(".wx_img_history");
+		oldimg_items.each(function() {
+			oldImgId += "'"+$(this).attr("id") + "',";
+		});
+		if(oldImgId != ''){
+			oldImgId = oldImgId.substring(0, oldImgId.length - 1);
+		}
+		//更新患者信息
+		$.ajax({
+			url : path + "/compcolor/updatePatientInfo.do",
+			type : 'post',
+			dataType : "json",
+			async : true,
+			data : patinfo+"&selectPatId="+selectPatId+"&schemeId="+schemeId,
+			success : function(data) {
+				//patId = data[0].patId;
+				//schemeId = data[0].schemeId;
+				//upId = data[0].upId;
+			}
+		});
+		
+		//formdata上传
+		var url = path + "/compcolor/addPatientSchemeImgForPc.do";
+		var folder = "/upload/wx/patient/" + patId+"/"+schemeId;
+		
+		imgFormData.append("flag",flag);
+		imgFormData.append("patId",patId);
+		imgFormData.append("schemeId",schemeId);
+		imgFormData.append("folder",folder);
+		imgFormData.append("oldImgId",oldImgId);
+		
+		$.ajax({
+			url : url,
+			type : 'post',
+			dataType : "text",
+			async : false,
+/* 			data : {
+				flag : flag,
+				patId : patId,
+				schemeId : schemeId,
+				folder : folder,
+				oldImgId : oldImgId
+			}, */
+			data : imgFormData,
+	        processData : false,         // 告诉jQuery不要去处理发送的数据
+	        contentType : false,        // 告诉jQuery不要去设置Content-Type请求头
+			success : function(data) {
+				if (flag == 'add') {
+					if (data == 'ok') {
+						$("#saveInfo").removeAttr("disabled");
+						$(".fakeloader").fadeOut();
+						alert('保存成功！');
+						window.location.href = "../cchome.html?patId="+patId+"&schemeId="+schemeId+"&colorPlane="+$("input[name='patInfo.colorPlane']:checked").val()+"&random="+Math.random();
+					}else if(data == 'empty'){
+						$("#saveInfo").removeAttr("disabled");
+						$(".fakeloader").fadeOut();
+						alert('口内照不能为空！');
+					}	
+				} else {
+					$("#saveInfo").removeAttr("disabled");
+					$(".fakeloader").fadeOut();
+					alert('保存成功！');
+					window.location.href = "../cchome.html?patId="+patId+"&schemeId="+schemeId+"&colorPlane="+$("input[name='patInfo.colorPlane']:checked").val()+"&random="+Math.random();
+				}
+			}
+		});
+	}
+}
+
+function savePat(){
+	if(bsType == 'add'){
+		var flag = 'add';
+		var from = $("#imgFrm");
+		var patinfo = serializeForm("infoFrm");
+		//患者和方案id
+		patId = Math.uuidCompact();
+		schemeId = Math.uuidCompact();
+		
+		//新增患者和方案信息
+		$.ajax({
+			url : path + "/compcolor/savePatientInfo.do",
+			type : 'post',
+			dataType : "json",
+			async : true,
+			data : patinfo+"&patInfo.patId="+patId+"&schemeId="+schemeId,
+			success : function(data) {
+				//patId = data[0].patId;
+				//schemeId = data[0].schemeId;
+				//upId = data[0].upId;
+			}
+		});
+		
+		//从微信服务器下载图片
+		var serverIds = '';
+		var lid = '';
+		var img_items = from.find(".wx_img");
+		img_items.each(function() {
+			lid += $(this).attr("src") + ",";
+		});
+		var ids;
+		var i = 0;
+		var length = 0;
+		if (lid != '') {
+			lid = lid.substring(0, lid.length - 1);
+			ids = lid.split(",");
+			length = ids.length;
+		}
+		
+		//历史图片id
+		var oldImgId = '';
+		var oldimg_items = from.find(".wx_img_history");
+		oldimg_items.each(function() {
+			oldImgId += "'"+$(this).attr("id") + "',";
+		});
+		if(oldImgId != ''){
+			oldImgId = oldImgId.substring(0, oldImgId.length - 1);
+		}
+		
+		if (length > 0) {
+			upload(i, length, ids, serverIds, patId,schemeId, flag, oldImgId);
+		} else {
+			uploadToServer('', patId,schemeId, flag, oldImgId);
+		}
+		
+	}else{
+		var flag = 'update';
+		var from = $("#imgFrm");
+		var patinfo = serializeForm("infoFrm");
+		//方案id
+		schemeId = Math.uuidCompact();
+		patId = selectPatId;
+		
+		//更新患者信息
+		$.ajax({
+			url : path + "/compcolor/updatePatientInfo.do",
+			type : 'post',
+			dataType : "json",
+			async : true,
+			data : patinfo+"&selectPatId="+selectPatId+"&schemeId="+schemeId,
+			success : function(data) {
+				//patId = data[0].patId;
+				//schemeId = data[0].schemeId;
+				//upId = data[0].upId;
+			}
+		});
+		
+		//图片上传
+		var serverIds = '';
+		var lid = '';
+		var img_items = from.find(".wx_img");
+		img_items.each(function() {
+			lid += $(this).attr("src") + ",";
+		});
+		var ids;
+		var i = 0;
+		var length = 0;
+		if (lid != '') {
+			lid = lid.substring(0, lid.length - 1);
+			ids = lid.split(",");
+			length = ids.length;
+		}
+
+		//历史图片id
+		var oldImgId = '';
+		var oldimg_items = from.find(".wx_img_history");
+		oldimg_items.each(function() {
+			oldImgId += "'"+$(this).attr("id") + "',";
+		});
+		if(oldImgId != ''){
+			oldImgId = oldImgId.substring(0, oldImgId.length - 1);
+		}
+		
+		if (length > 0) {
+			upload(i, length, ids, serverIds, patId,schemeId, flag, oldImgId);
+		} else {
+			uploadToServer('', patId,schemeId, flag, oldImgId);
+		}	
+	}
+}
+
+function upload(i, length, ids, serverIds, patId,schemeId, flag, oldImgId) {
+	wx.uploadImage({
+		localId : ids[i],
+		isShowProgressTips : 0,
+		success : function(res) {
+			i++;
+			serverIds += res.serverId + ",";
+			if (i < length) {
+				upload(i, length, ids, serverIds, patId,schemeId, flag, oldImgId);
+			} else {
+				serverIds = serverIds.substring(0, serverIds.length - 1);
+				uploadToServer(serverIds, patId,schemeId, flag, oldImgId);
+			}
+		},
+		fail : function(res) {
+		}
+	});
+}
+//保存图片
+function uploadToServer(serverIds, patId,schemeId, flag, oldImgId) {
+	var url = path + "/compcolor/addPatientSchemeImg.do";
+	var folder = "/upload/wx/patient/" + patId+"/"+schemeId;
+	var current_url = location.href;
+	$.ajax({
+		url : url,
+		type : 'post',
+		dataType : "text",
+		async : false,
+		data : {
+			flag : flag,
+			patId : patId,
+			schemeId : schemeId,
+			oldSchemeId : oldSchemeId,
+			serverIds : serverIds,
+			folder : folder,
+			oldImgId : oldImgId
+		},
+		success : function(data) {
+			if (flag == 'add') {
+				if (data == 'ok') {
+					$("#saveInfo").removeAttr("disabled");
+					//$(mask).remove();
+					$(".fakeloader").fadeOut();
+					alert('保存成功！');
+					window.location.href = "../cchome.html?patId="+patId+"&schemeId="+schemeId+"&colorPlane="+$("input[name='patInfo.colorPlane']:checked").val()+"&random="+Math.random();
+				}else if(data == 'empty'){
+					$("#saveInfo").removeAttr("disabled");
+					//$(mask).remove();
+					$(".fakeloader").fadeOut();
+					alert('口内照不能为空！');
+				}	
+			} else {
+				$("#saveInfo").removeAttr("disabled");
+				//$(mask).remove();
+				$(".fakeloader").fadeOut();
+				alert('保存成功！');
+				window.location.href = "../cchome.html?patId="+patId+"&schemeId="+schemeId+"&colorPlane="+$("input[name='patInfo.colorPlane']:checked").val()+"&random="+Math.random();
+			}
+		}
+	});
+}
+function goList(){
+	window.location.href = "index.html?random="+Math.random();
+}
+
+//开始按
+function gtouchstart(obj) {
+	var imgId = $(obj).attr("id");
+	timeOutEvent = setTimeout("longPress('"+imgId+"')", 500);
+	//这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适
+	return false;
+};
+
+//手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件
+function gtouchend(obj) {
+	clearTimeout(timeOutEvent);
+	//清除定时器
+	if (timeOutEvent != 0) {
+	//这里写要执行的内容（尤如onclick事件）
+		previewImage(obj);
+	}
+	return false;
+};
+
+//如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按
+function gtouchmove() {
+	clearTimeout(timeOutEvent);
+	//清除定时器
+	timeOutEvent = 0;
+};
+
+//真正长按后应该执行的内容
+function longPress(obj) {
+	timeOutEvent = 0;
+	//执行长按要执行的内容，如弹出菜单
+	if (confirm("您确定要删除本图片吗?")) {
+		$("#"+obj).parent().remove();
+		//非微信上传，删除formdata中的值
+		if(!is_weixn()){
+			imgFormData.delete(obj);
+		}
+	}
+}
+
+function preview(file)  
+{
+	for(var a =0;a<file.files.length;a++){
+		if (file.files[a])
+		{
+			var fileName = file.files[a].name.split(".")[0];
+			var reader = new FileReader();
+			reader.onload = function(evt){
+				var html = '<div class="col-md-4 col-xs-4"><img class="img-responsive pad wx_img" id="' + fileName + '" src="' + evt.target.result + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+				$("#upload-img-div").find(".row").find(".col-md-4").first().before(html);
+			}
+			reader.readAsDataURL(file.files[a]);
+			imgFormData.append(fileName,file.files[a]);
+		}
+	}
+
+	//console.log(imgFormData.get('Jellyfish')); // ["sean", "will"]
+/* 	else
+	{
+		prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'"></div>';  
+	}  */ 
+}
+</script>
+</html>

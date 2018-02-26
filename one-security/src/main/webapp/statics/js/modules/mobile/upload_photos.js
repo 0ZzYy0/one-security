@@ -1,3 +1,8 @@
+var images = {
+	localId : [],
+	serverId : []
+};
+
 var vm = new Vue({
 	el:'#uploadPhotos',
 	data:{
@@ -54,10 +59,39 @@ var vm = new Vue({
 	}
 });
 
+$(function(){
+	getConfig();
+});
 
-function chooseImage() {
+
+
+function getConfig() {
+	var url = "basfile/getConfig";
+	var htmlUrl = location.href;
+	$.ajax({
+		url: baseURL + url,
+		type : 'post',
+		dataType : "json",
+		async : true,
+		data : {
+			htmlUrl : htmlUrl
+		},
+		success : function(r) {
+			wx.config({
+				debug : false,
+				appId : r.appId,
+				timestamp : r.timestamp,
+				nonceStr : r.nonceStr,
+				signature : r.signature,
+				jsApiList : [ 'chooseImage', 'previewImage', 'uploadImage' ]
+			});
+		}
+	});
+}
+
+function chooseImage(group) {
 	wx.chooseImage({
-		count : 9,
+		count : 4,
 		sizeType : ['original','compressed'],// 
 		success : function(res) {
 			images.localId = res.localIds;
@@ -66,11 +100,14 @@ function chooseImage() {
 				if(imgId.indexOf("://")>0){
 					imgId = imgId.split("://")[1];
 				}
-				var html = '<div class="col-md-4 col-xs-4"><img class="img-responsive pad wx_img" id="' + imgId + '" src="' + res.localIds[i] + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
-				$("#upload-img-div").find(".row").find(".col-md-4").first().before(html);
+				var html = '<div class="col-md-3 col-xs-3"><img class="img-responsive pad wx_img" id="' + imgId + '" src="' + res.localIds[i] + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+				$("#group"+group).find(".row").find(".col-md-4").first().before(html);
+				var leng = $("#group"+group).children('img').length();
+				alert(leng);
+				/*if(leng == 5){
+					$("#group"+group).find(".row").find(".col-md-4").first().hide();
+				}*/
 			}
 		}
 	});
 }
-
-
