@@ -3,7 +3,7 @@ package com.weixin.menu;
  * 按钮的基类
  * 
  * @author zy
- * @date 2013-10-14
+ * @date 2018-02-26
  */
 public class Button {
 	private String name;
