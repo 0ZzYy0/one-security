@@ -46,6 +46,11 @@ public class BasToothPositionServiceImpl implements BasToothPositionService {
 	}
 
 	@Override
+	public void deleteByInfoId(Map<String, Object> map) {
+		basToothPositionDao.deleteByInfoId(map);
+	}
+
+	@Override
 	public void deleteBatch(Long[] posIds) {
 		basToothPositionDao.deleteBatch(posIds);
 	}

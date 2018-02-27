@@ -1,10 +1,13 @@
 package com.one.modules.sys.controller;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -16,12 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.one.common.utils.ConfigConstant;
 import com.one.common.utils.PageUtils;
 import com.one.common.utils.Query;
 import com.one.common.utils.R;
+import com.one.mobile.login.config.WxStorageConfig;
+import com.one.modules.sys.entity.BasFileEntity;
 import com.one.modules.sys.entity.BasToothPositionEntity;
+import com.one.modules.sys.service.BasFileService;
 import com.one.modules.sys.service.BasToothPositionService;
+import com.one.modules.sys.service.SysConfigService;
 import com.one.modules.sys.shiro.ShiroUtils;
+import com.weixin.pojo.Ticket;
+import com.weixin.pojo.Token;
+import com.weixin.util.AdvancedUtil;
+import com.weixin.util.CommonUtil;
 
 /**
  * 患者牙位表
@@ -35,6 +47,14 @@ import com.one.modules.sys.shiro.ShiroUtils;
 public class BasToothPositionController {
 	@Autowired
 	private BasToothPositionService basToothPositionService;
+	
+	@Autowired
+	private BasFileService basFileService;
+
+	@Autowired
+	private SysConfigService sysConfigService;
+	private final static String KEY = ConfigConstant.WX_CONFIG_KEY;
+	public ServletContext application;
 
 	/**
 	 * 列表
@@ -45,10 +65,12 @@ public class BasToothPositionController {
 		// 查询列表数据
 		Query query = new Query(params);
 
-		List<BasToothPositionEntity> basToothPositionList = basToothPositionService.queryList(query);
+		List<BasToothPositionEntity> basToothPositionList = basToothPositionService
+				.queryList(query);
 		int total = basToothPositionService.queryTotal(query);
 
-		PageUtils pageUtil = new PageUtils(basToothPositionList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(basToothPositionList, total,
+				query.getLimit(), query.getPage());
 
 		return R.ok().put("page", pageUtil);
 	}
@@ -59,7 +81,8 @@ public class BasToothPositionController {
 	@RequestMapping("/info/{posId}")
 	@RequiresPermissions("bastoothposition:info")
 	public R info(@PathVariable("posId") Long posId) {
-		BasToothPositionEntity basToothPosition = basToothPositionService.queryObject(posId);
+		BasToothPositionEntity basToothPosition = basToothPositionService
+				.queryObject(posId);
 
 		return R.ok().put("basToothPosition", basToothPosition);
 	}
@@ -112,18 +135,23 @@ public class BasToothPositionController {
 		dataList = basToothPositionService.getPatient(parameMap);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		if (dataList.size() > 0) {
-			if(dataList.get(0).get("parentName") != null){
-				String parentName = dataList.get(0).get("parentName").toString();
-				if(!"".equals(parentName)){
-					dataList.get(0).put("deptName", parentName + "-" + dataList.get(0).get("deptName").toString());
+			if (dataList.get(0).get("parentName") != null) {
+				String parentName = dataList.get(0).get("parentName")
+						.toString();
+				if (!"".equals(parentName)) {
+					dataList.get(0).put(
+							"deptName",
+							parentName
+									+ "-"
+									+ dataList.get(0).get("deptName")
+											.toString());
 				}
 			}
 			return R.ok().put("entity", dataList.get(0));
 		}
 		return R.ok();
 	}
-	
-	
+
 	/**
 	 * 跳转到wx上传患者照片界面
 	 * 
@@ -131,8 +159,72 @@ public class BasToothPositionController {
 	 */
 	@RequestMapping(value = "toUploadPhotos")
 	public String toUploadPhotos(HttpServletRequest request) {
-		ShiroUtils.getSession().setAttribute("infoId", request.getParameter("infoId"));
-		ShiroUtils.getSession().setAttribute("tableName", request.getParameter("tableName"));
+		ShiroUtils.getSession().setAttribute("infoId",
+				request.getParameter("infoId"));
+		ShiroUtils.getSession().setAttribute("tableName",
+				request.getParameter("tableName"));
 		return "redirect:/modules/mobile/upload_photos.html";
 	}
+
+	/**
+	 * 跳转到wx上传患者照片界面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "addBasToothPosition")
+	@ResponseBody
+	public String addBasToothPosition(HttpServletRequest request) {
+		String infoId = request.getParameter("infoId");
+		String tableName = request.getParameter("tableName");
+		String serverIds = request.getParameter("serverIds");
+		String folder = request.getParameter("folder");
+		String rootPath = request.getSession().getServletContext().getRealPath(File.separator);
+		String realPath = rootPath + folder;
+		System.out.println("***********");
+		System.out.println(realPath);
+		System.out.println("***********");
+		// 先删除
+		// Map<String ,Object> paraMap = new HashMap<String ,Object>();
+		// paraMap.put("infoId", infoId);
+		// paraMap.put("tableName", tableName);
+		// basToothPositionService.deleteByInfoId(paraMap);
+
+		if (serverIds != null && !serverIds.equals("")) {
+			WxStorageConfig config = sysConfigService.getConfigObject(KEY,WxStorageConfig.class);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("appid", config.getAppId());
+			map.put("appsecret", config.getAppSecrect());
+
+			// 获取接口访问凭证
+			Token token = CommonUtil.getToken(map.get("appid"),map.get("appsecret"));
+			String accessToken = token.getAccessToken();
+			if (serverIds != null && !"".equals(serverIds)) {
+				for (String serverId : serverIds.split(",")) {
+					String fileName = AdvancedUtil.getMedia(accessToken,serverId, realPath);
+					BasToothPositionEntity basToothPosition = new BasToothPositionEntity();
+					//根据时间生成随机id
+					int random = (int)(Math.random()*900+100);
+					Long timeRandom = Long.parseLong((Calendar.getInstance().getTime().getTime()) + "");
+					basToothPosition.setPosId(timeRandom+random);
+					basToothPosition.setInfoId(Long.parseLong(infoId));
+					basToothPosition.setOperateTable(tableName);
+					basToothPosition.setPosCode("1");
+					basToothPositionService.save(basToothPosition);
+					
+					random = (int)(Math.random()*900+100);
+					timeRandom = Long.parseLong((Calendar.getInstance().getTime().getTime()) + "");
+					BasFileEntity basFile = new BasFileEntity();
+					basFile.setFileId((timeRandom+random)+"");
+					basFile.setPosId(basToothPosition.getPosId());
+					basFile.setFileType("x");
+					basFile.setFileAddr(fileName);
+					basFile.setFileSuffix("");
+					basFileService.save(basFile);
+				}
+				return "ok";
+			}
+		}
+		return "err";
+	}
+
 }

@@ -29,5 +29,7 @@ public interface BasToothPositionService {
 	
 	void delete(Long posId);
 	
+	void deleteByInfoId(Map<String, Object> map);
+	
 	void deleteBatch(Long[] posIds);
 }

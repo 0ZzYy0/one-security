@@ -125,5 +125,9 @@
 			#{posId}
 		</foreach>
 	</delete>
+	
+	<select id="deleteByInfoId" parameterType="map">
+		delete bas_tooth_position where info_id = #{infoId} and operate_Name = #{tableName}
+	</select>
 
 </mapper>
