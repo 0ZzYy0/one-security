@@ -53,6 +53,11 @@ var vm = new Vue({
 	            	console.log(data.entity);
 	            	vm.entity = data.entity;
 	            	console.log(vm.entity);
+	            	var html = "";
+	            	for(var i = 0 ; i < data.basFileList.length ; i++){
+	            		html += '<div class="col-md-3 col-xs-3"><img class="img-responsive pad hist_img" id="'+data.basFileList[i].fileId+'" src="' + data.basFileList[i].fileAddr + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+	            	}
+	            	$("#upload-img-div").find(".row").find(".imgArray").first().before(html);
 	            }
 	        });
 		}
@@ -157,6 +162,7 @@ function savePat(){
 	var lid = '';
 	var from = $("#imgFrm");
 	var img_items = from.find(".wx_img");
+	var hist_img = from.find(".hist_img").length;
 	img_items.each(function() {
 		lid += $(this).attr("src") + ",";
 	});
@@ -171,10 +177,12 @@ function savePat(){
 	
 	if (length > 0) {
 		upload(i, length, ids, serverIds);
-		//upload(i, length, ids, serverIds, patId,schemeId, flag, oldImgId);
-	} else {
-		//uploadToServer('', patId,schemeId, flag, oldImgId);
-		alert("asd");
+	}else{
+		if(hist_img > 0){
+			alert("保存成功");
+		}else{
+			alert("至少上传一张图片!");
+		}
 	}
 }
 

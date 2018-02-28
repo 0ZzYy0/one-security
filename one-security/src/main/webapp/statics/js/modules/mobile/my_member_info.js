@@ -67,7 +67,7 @@ var vm = new Vue({
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
-							window.location.href = baseURL + "modules/mobile/my_membe_list.html";
+							window.location.href = baseURL + "baspatmember/toList";
 						});
 					}else{
 						alert(r.msg);

@@ -67,7 +67,7 @@ var vm = new Vue({
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('保存成功', function(index){
-							window.location.href = baseURL + "modules/mobile/home.html";
+							window.location.href = baseURL + "baspatient/toHome";
 						});
 					}else{
 						alert(r.msg);

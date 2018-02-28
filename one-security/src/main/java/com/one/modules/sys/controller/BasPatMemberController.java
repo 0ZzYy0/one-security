@@ -180,4 +180,27 @@ public class BasPatMemberController {
 		List<Map<String ,Object>> dataList = basPatMemberService.queryCensusResultsList(paraMap);
 		return dataList;
 	}
+	
+	/**
+	 * 跳转到主页
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "toHome")
+	public String toHome() {
+		return "redirect:/modules/mobile/home.html";
+	}
+	
+	/**
+	 * 跳转到list页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "toList")
+	public String toList() {
+		return "redirect:/modules/mobile/my_membe_list.html";
+	}
+	
+	
+	
 }

@@ -24,6 +24,11 @@ public class BasFileServiceImpl implements BasFileService {
 	public List<BasFileEntity> queryList(Map<String, Object> map) {
 		return basFileDao.queryList(map);
 	}
+	
+	@Override
+	public List<BasFileEntity> queryListByPosId(String posId) {
+		return basFileDao.queryListByPosId(posId);
+	}
 
 	@Override
 	public int queryTotal(Map<String, Object> map) {

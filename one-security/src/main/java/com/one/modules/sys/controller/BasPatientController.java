@@ -178,4 +178,15 @@ public class BasPatientController {
 		// 跳转至患者个人信息
 		return "redirect:/modules/mobile/my_info.html";
 	}
+	
+	@RequestMapping(value = "toHome")
+	public String toHome() {
+		// 跳转至主页
+		System.out.println("******************");
+		System.out.println("******************");
+		System.out.println("******************");
+		System.out.println("******************");
+		System.out.println("******************");
+		return "redirect:/modules/mobile/home.html";
+	}
 }

@@ -19,6 +19,8 @@ public interface BasFileService {
 	
 	List<BasFileEntity> queryList(Map<String, Object> map);
 	
+	List<BasFileEntity> queryListByPosId(String posId);
+	
 	int queryTotal(Map<String, Object> map);
 	
 	void save(BasFileEntity basFile);

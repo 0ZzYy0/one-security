@@ -33,6 +33,10 @@
 		</if>
 	</select>
 	
+	<select id="queryListByPosId" resultType="com.one.modules.sys.entity.BasFileEntity">
+		select * from bas_file where pos_id = #{posId}
+	</select>
+	
  	<select id="queryTotal" resultType="int">
 		select count(*) from bas_file 
 	</select>

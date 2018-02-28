@@ -36,7 +36,7 @@
 	<div class="box box-info">
       <div class="box-header with-border">
         <div class="pull-left">
-       	 <button type="button" class="btn btn-box-tool" onclick="goList();"><i class="fa fa-chevron-left  fa-lg"></i></button>
+       	 <button type="button" class="btn btn-box-tool" onclick="toHome();"><i class="fa fa-chevron-left  fa-lg"></i></button>
         </div>
        	<div class="pull-right">
        		<button type="button" class="btn btn-box-tool"  onclick="info()"><i class="fa fa-user-plus fa-lg"></i></button>
@@ -53,8 +53,8 @@
 function goDetail(patId,patName,createTime,remark){
 	window.location.href = "bs_history.html?patId="+patId+"&patName="+patName+"&createTime="+createTime+"&remark="+remark+"&random="+Math.random();
 }
-function goList(){
-	window.location.href = baseURL + "modules/mobile/home.html";
+function toHome(){
+	window.location.href = baseURL + "baspatmember/toHome";
 }
 function info(memberId){
 	window.location.href = "${request.contextPath}/baspatmember/toMyMemberInfo?memberId="+memberId;

@@ -24,6 +24,11 @@ public class BasToothPositionServiceImpl implements BasToothPositionService {
 	public List<BasToothPositionEntity> queryList(Map<String, Object> map) {
 		return basToothPositionDao.queryList(map);
 	}
+	
+	@Override
+	public List<BasToothPositionEntity> queryListByInfoId(Map<String, Object> map) {
+		return basToothPositionDao.queryListByInfoId(map);
+	}
 
 	@Override
 	public int queryTotal(Map<String, Object> map) {

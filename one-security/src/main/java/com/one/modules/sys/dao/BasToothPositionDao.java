@@ -19,5 +19,7 @@ public interface BasToothPositionDao extends BaseDao<BasToothPositionEntity> {
 	
 	List<Map<String, Object>> getPatient(Map<String, String> map);
 	
+	List<BasToothPositionEntity> queryListByInfoId(Map<String, Object> map);
+	
 	void deleteByInfoId(Map<String, Object> map);
 }

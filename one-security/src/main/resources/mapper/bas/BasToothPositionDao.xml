@@ -81,6 +81,10 @@
 		</if>
 	</select>
 	
+	<select id="queryListByInfoId" resultType="com.one.modules.sys.entity.BasToothPositionEntity">
+		select * from bas_tooth_position where 1=1 and info_id = #{infoId} and operate_table = #{tableName}
+	</select>
+	
  	<select id="queryTotal" resultType="int">
 		select count(*) from bas_tooth_position 
 	</select>

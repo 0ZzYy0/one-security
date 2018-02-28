@@ -19,6 +19,8 @@ public interface BasToothPositionService {
 	
 	List<BasToothPositionEntity> queryList(Map<String, Object> map);
 	
+	List<BasToothPositionEntity> queryListByInfoId(Map<String, Object> map);
+	
 	List<Map<String,Object>> getPatient(Map<String, String> map);
 	
 	int queryTotal(Map<String, Object> map);

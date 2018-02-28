@@ -1,6 +1,7 @@
 package com.one.modules.sys.controller;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -47,9 +48,10 @@ import com.weixin.util.CommonUtil;
 public class BasToothPositionController {
 	@Autowired
 	private BasToothPositionService basToothPositionService;
-	
+
 	@Autowired
 	private BasFileService basFileService;
+	
 
 	@Autowired
 	private SysConfigService sysConfigService;
@@ -65,12 +67,10 @@ public class BasToothPositionController {
 		// 查询列表数据
 		Query query = new Query(params);
 
-		List<BasToothPositionEntity> basToothPositionList = basToothPositionService
-				.queryList(query);
+		List<BasToothPositionEntity> basToothPositionList = basToothPositionService.queryList(query);
 		int total = basToothPositionService.queryTotal(query);
 
-		PageUtils pageUtil = new PageUtils(basToothPositionList, total,
-				query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(basToothPositionList, total, query.getLimit(), query.getPage());
 
 		return R.ok().put("page", pageUtil);
 	}
@@ -81,8 +81,7 @@ public class BasToothPositionController {
 	@RequestMapping("/info/{posId}")
 	@RequiresPermissions("bastoothposition:info")
 	public R info(@PathVariable("posId") Long posId) {
-		BasToothPositionEntity basToothPosition = basToothPositionService
-				.queryObject(posId);
+		BasToothPositionEntity basToothPosition = basToothPositionService.queryObject(posId);
 
 		return R.ok().put("basToothPosition", basToothPosition);
 	}
@@ -125,31 +124,63 @@ public class BasToothPositionController {
 	 */
 	@RequestMapping("/getPatient/{parame}")
 	@ResponseBody
-	public R getPatient(@PathVariable("parame") String parame) {
-		String infoId = parame.split("-")[0];
-		String tableName = parame.split("-")[1];
-		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
-		Map<String, String> parameMap = new HashMap<>();
-		parameMap.put("infoId", infoId);
-		parameMap.put("tableName", tableName);
-		dataList = basToothPositionService.getPatient(parameMap);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		if (dataList.size() > 0) {
-			if (dataList.get(0).get("parentName") != null) {
-				String parentName = dataList.get(0).get("parentName")
-						.toString();
-				if (!"".equals(parentName)) {
-					dataList.get(0).put(
-							"deptName",
-							parentName
-									+ "-"
-									+ dataList.get(0).get("deptName")
-											.toString());
+	public R getPatient(@PathVariable("parame") String parame,HttpServletRequest request) throws Exception {
+		R r = R.ok();
+		if (parame != null) {
+			String infoId = parame.split("-")[0];
+			String tableName = parame.split("-")[1];
+			//取出基本信息
+			List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+			Map<String, String> parameMap = new HashMap<>();
+			parameMap.put("infoId", infoId);
+			parameMap.put("tableName", tableName);
+			dataList = basToothPositionService.getPatient(parameMap);
+			Map<String, Object> dataMap = new HashMap<String, Object>();
+			if (dataList.size() > 0) {
+				if (dataList.get(0).get("parentName") != null) {
+					String parentName = dataList.get(0).get("parentName").toString();
+					if (!"".equals(parentName)) {
+						dataList.get(0).put("deptName", parentName + "-" + dataList.get(0).get("deptName").toString());
+					}
+				}
+				r.put("entity", dataList.get(0));
+			}
+			
+			//取出图片信息
+			Map<String,Object> paraMap = new HashMap<String , Object>();
+			paraMap.put("infoId", infoId);
+			paraMap.put("tableName", tableName);
+			List<BasToothPositionEntity> basToothPositionList = basToothPositionService.queryListByInfoId(paraMap);
+			
+			if(basToothPositionList.size() >= 1){
+				List<BasFileEntity> basFileList = new ArrayList<BasFileEntity>();
+				
+				
+				
+				
+				
+				
+				//这里有问题,暂时先这么写回头处理
+				for(int i = 0 ; i < basToothPositionList.size() ; i++){
+					basFileList.addAll(basFileService.queryListByPosId(basToothPositionList.get(i).getPosId()+""));
+				}
+
+				
+				
+				
+				
+				
+				InetAddress address = InetAddress.getLocalHost();
+				String hostAddress = address.getHostAddress();//获取的是本地的IP地址
+				if(basFileList.size() > 0 ){
+					for(BasFileEntity basFile : basFileList){
+						basFile.setFileAddr("http://"+hostAddress+":"+request.getLocalPort()+"/one-security"+basFile.getFileAddr().replace("\\", "/"));
+					}
+					r.put("basFileList", basFileList);
 				}
 			}
-			return R.ok().put("entity", dataList.get(0));
 		}
-		return R.ok();
+		return r;
 	}
 
 	/**
@@ -159,10 +190,8 @@ public class BasToothPositionController {
 	 */
 	@RequestMapping(value = "toUploadPhotos")
 	public String toUploadPhotos(HttpServletRequest request) {
-		ShiroUtils.getSession().setAttribute("infoId",
-				request.getParameter("infoId"));
-		ShiroUtils.getSession().setAttribute("tableName",
-				request.getParameter("tableName"));
+		ShiroUtils.getSession().setAttribute("infoId", request.getParameter("infoId"));
+		ShiroUtils.getSession().setAttribute("tableName", request.getParameter("tableName"));
 		return "redirect:/modules/mobile/upload_photos.html";
 	}
 
@@ -180,44 +209,36 @@ public class BasToothPositionController {
 		String folder = request.getParameter("folder");
 		String rootPath = request.getSession().getServletContext().getRealPath(File.separator);
 		String realPath = rootPath + folder;
-		System.out.println("***********");
-		System.out.println(realPath);
-		System.out.println("***********");
-		// 先删除
-		// Map<String ,Object> paraMap = new HashMap<String ,Object>();
-		// paraMap.put("infoId", infoId);
-		// paraMap.put("tableName", tableName);
-		// basToothPositionService.deleteByInfoId(paraMap);
-
+		
 		if (serverIds != null && !serverIds.equals("")) {
-			WxStorageConfig config = sysConfigService.getConfigObject(KEY,WxStorageConfig.class);
+			WxStorageConfig config = sysConfigService.getConfigObject(KEY, WxStorageConfig.class);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("appid", config.getAppId());
 			map.put("appsecret", config.getAppSecrect());
 
 			// 获取接口访问凭证
-			Token token = CommonUtil.getToken(map.get("appid"),map.get("appsecret"));
+			Token token = CommonUtil.getToken(map.get("appid"), map.get("appsecret"));
 			String accessToken = token.getAccessToken();
 			if (serverIds != null && !"".equals(serverIds)) {
 				for (String serverId : serverIds.split(",")) {
-					String fileName = AdvancedUtil.getMedia(accessToken,serverId, realPath);
+					String fileName = AdvancedUtil.getMedia(accessToken, serverId, realPath);
 					BasToothPositionEntity basToothPosition = new BasToothPositionEntity();
-					//根据时间生成随机id
-					int random = (int)(Math.random()*900+100);
+					// 根据时间生成随机id
+					int random = (int) (Math.random() * 900 + 100);
 					Long timeRandom = Long.parseLong((Calendar.getInstance().getTime().getTime()) + "");
-					basToothPosition.setPosId(timeRandom+random);
+					basToothPosition.setPosId(timeRandom + random);
 					basToothPosition.setInfoId(Long.parseLong(infoId));
 					basToothPosition.setOperateTable(tableName);
 					basToothPosition.setPosCode("1");
 					basToothPositionService.save(basToothPosition);
-					
-					random = (int)(Math.random()*900+100);
+
+					random = (int) (Math.random() * 900 + 100);
 					timeRandom = Long.parseLong((Calendar.getInstance().getTime().getTime()) + "");
 					BasFileEntity basFile = new BasFileEntity();
-					basFile.setFileId((timeRandom+random)+"");
+					basFile.setFileId((timeRandom + random) + "");
 					basFile.setPosId(basToothPosition.getPosId());
 					basFile.setFileType("x");
-					basFile.setFileAddr(fileName);
+					basFile.setFileAddr(folder + "\\" + fileName);
 					basFile.setFileSuffix("");
 					basFileService.save(basFile);
 				}
