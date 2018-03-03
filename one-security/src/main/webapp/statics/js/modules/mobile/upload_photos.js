@@ -95,7 +95,7 @@ function getConfig() {
 function chooseImage() {
 	wx.chooseImage({
 		count : 9,
-		sizeType : ['original','compressed'],// 
+		sizeType : ['original','compressed'],
 		success : function(res) {
 			images.localId = res.localIds;
 			for ( var i = 0; i < res.localIds.length; i++) {
@@ -103,7 +103,7 @@ function chooseImage() {
 				if(imgId.indexOf("://")>0){
 					imgId = imgId.split("://")[1];
 				}
-				var html = '<div class="col-md-3 col-xs-3"><img class="img-responsive pad wx_img" id="' + imgId + '" src="' + res.localIds[i] + '" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
+				var html = '<div class="col-md-3 col-xs-3"><img class="img-responsive pad wx_img" id="' + imgId + '" src="' + res.localIds[i] + '" localId = "'+res.localIds[i]+'" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend(this)" /></div>';
 				$("#upload-img-div").find(".row").find(".imgArray").first().before(html);
 			}
 		}
@@ -164,7 +164,7 @@ function savePat(){
 	var img_items = from.find(".wx_img");
 	var hist_img = from.find(".hist_img").length;
 	img_items.each(function() {
-		lid += $(this).attr("src") + ",";
+		lid += $(this).attr("localId") + ",";
 	});
 	var ids;
 	var i = 0;

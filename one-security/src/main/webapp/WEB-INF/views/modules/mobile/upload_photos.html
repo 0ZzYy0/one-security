@@ -44,7 +44,7 @@
 <body>
 	<div class="content-wrapper" style="margin-left: 0px;">
 		<section class="content">
-			<div id="uploadPhotos" class="box box-warning">
+			<div id="uploadPhotos" class="box box-info">
 				<div class="box-header with-border"></div>
 				<div class="box-body">
 					<form>
@@ -54,7 +54,8 @@
 									<label>患者姓名:</label>
 								</div>
 								<div class="col-xs-8 ">
-									<input type="text" class="form-control" v-model="entity.name" disabled="disabled">
+									<input type="text" class="form-control" v-model="entity.name"
+										disabled="disabled">
 								</div>
 							</div>
 						</div>
@@ -64,7 +65,8 @@
 									<label>患者类型:</label>
 								</div>
 								<div class="col-xs-8 ">
-									<input type="text" class="form-control" v-model="entity.type" disabled="disabled">
+									<input type="text" class="form-control" v-model="entity.type"
+										disabled="disabled">
 								</div>
 							</div>
 						</div>
@@ -96,7 +98,8 @@
 									<label>年龄:</label>
 								</div>
 								<div class="col-xs-8 ">
-									<input type="text" class="form-control" v-model="entity.age" disabled="disabled">
+									<input type="text" class="form-control" v-model="entity.age"
+										disabled="disabled">
 								</div>
 							</div>
 						</div>
@@ -106,30 +109,36 @@
 									<label>性别:</label>
 								</div>
 								<div class="col-xs-8 ">
-									<input type="text" class="form-control" v-model="entity.gender" disabled="disabled">
+									<input type="text" class="form-control" v-model="entity.gender"
+										disabled="disabled">
+								</div>
+							</div>
+						</div>
+					</form>
+
+
+					<input type="hidden" id="infoId" value="${Session.infoId}">
+					<input type="hidden" id="tableName" value="${Session.tableName}">
+					<input type="hidden" id="uploadPermissions"
+						value="${Session.uploadPermissions}">
+					<form id="imgFrm">
+						<div class="form-group">
+							<div id="upload-img-div">
+								<div class="row" name="showImg">
+									<div class="col-md-3 col-xs-3 imgArray">
+										<img id="uploadWxControls" class="img-responsive pad"
+											onclick="chooseImage()" src="../../statics/images/plus.png" />
+									</div>
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
-				<input type="hidden" id="infoId" value="${Session.infoId}">
-				<input type="hidden" id="tableName" value="${Session.tableName}">
-				<input type="hidden" id="uploadPermissions"
-					value="${Session.uploadPermissions}">
-				<form id="imgFrm">
-					<div class="form-group">
-						<div id="upload-img-div">
-							<div class="row" name="showImg">
-								<div class="col-md-3 col-xs-3 imgArray">
-									<img id="uploadWxControls" class="img-responsive pad"
-										onclick="chooseImage()" src="../../statics/images/plus.png" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
+				<div class="box-footer">
+					<input type="button" class="btn btn-primary pull-right"
+						id="saveImage" onclick="savePat()" value="保存" />
+				</div>
 			</div>
-			<input type="button" class="btn btn-primary pull-right" id="saveImage" onclick="savePat()" value="保存"><br><br>
 		</section>
 	</div>
 	<script
