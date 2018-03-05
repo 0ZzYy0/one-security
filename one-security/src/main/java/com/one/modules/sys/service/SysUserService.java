@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.one.modules.sys.entity.SysUserEntity;
-import com.weixin.pojo.SNSUserInfo;
+import com.one.weixin.pojo.SNSUserInfo;
 
 
 /**

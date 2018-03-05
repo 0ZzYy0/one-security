@@ -25,10 +25,10 @@ import com.one.mobile.login.config.WxStorageConfig;
 import com.one.modules.sys.entity.BasFileEntity;
 import com.one.modules.sys.service.BasFileService;
 import com.one.modules.sys.service.SysConfigService;
-import com.weixin.pojo.Ticket;
-import com.weixin.pojo.Token;
-import com.weixin.util.CommonUtil;
-import com.weixin.util.SHA1;
+import com.one.weixin.pojo.Ticket;
+import com.one.weixin.pojo.Token;
+import com.one.weixin.util.CommonUtil;
+import com.one.weixin.util.SHA1;
 
 /**
  * 文件信息表

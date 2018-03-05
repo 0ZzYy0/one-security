@@ -31,10 +31,10 @@ import com.one.modules.sys.service.BasFileService;
 import com.one.modules.sys.service.BasToothPositionService;
 import com.one.modules.sys.service.SysConfigService;
 import com.one.modules.sys.shiro.ShiroUtils;
-import com.weixin.pojo.Ticket;
-import com.weixin.pojo.Token;
-import com.weixin.util.AdvancedUtil;
-import com.weixin.util.CommonUtil;
+import com.one.weixin.pojo.Ticket;
+import com.one.weixin.pojo.Token;
+import com.one.weixin.util.AdvancedUtil;
+import com.one.weixin.util.CommonUtil;
 
 /**
  * 患者牙位表

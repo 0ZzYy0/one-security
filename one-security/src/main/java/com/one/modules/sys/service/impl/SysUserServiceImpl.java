@@ -13,7 +13,7 @@ import com.one.modules.sys.entity.SysUserEntity;
 import com.one.modules.sys.service.SysUserRoleService;
 import com.one.modules.sys.service.SysUserService;
 import com.one.modules.sys.shiro.ShiroUtils;
-import com.weixin.pojo.SNSUserInfo;
+import com.one.weixin.pojo.SNSUserInfo;
 
 import java.util.ArrayList;
 import java.util.Date;

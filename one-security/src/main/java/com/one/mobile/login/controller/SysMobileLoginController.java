@@ -30,9 +30,9 @@ import com.one.modules.sys.service.BasPatientService;
 import com.one.modules.sys.service.SysConfigService;
 import com.one.modules.sys.service.SysUserService;
 import com.one.modules.sys.shiro.ShiroUtils;
-import com.weixin.pojo.SNSUserInfo;
-import com.weixin.pojo.WeixinOauth2Token;
-import com.weixin.util.AdvancedUtil;
+import com.one.weixin.pojo.SNSUserInfo;
+import com.one.weixin.pojo.WeixinOauth2Token;
+import com.one.weixin.util.AdvancedUtil;
 
 /**
  * 微信登录
